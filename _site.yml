@@ -1,0 +1,42 @@
+name: "Bad-Visualisations-Exercises"
+output_dir: "."
+navbar:
+  type: inverse
+  left: 
+    - text: "Home"
+      icon: fa-home
+      href: index.html
+    - text: "Exercise One"
+      menu:
+        - text: "Questions"
+          href: Untitled.html
+        - text: "Answers"
+          href: answer_untitles.html
+    - text: "Exercise Two"
+      menu: 
+        - text: "Questions"
+          href: Exercise_2_Pie_Chards.html
+        - text: "Answers"
+          href: Pie_Charts_Answers.html
+    - text: "Exercise Three"
+      menu: 
+        - text: "Questions"
+          href: exercise_three_clutter.html
+        - text: "Answers"
+          href: exer_three_ans.html
+    - text: "Exercise Four"
+      menu: 
+        - text: "Questions"
+          href: exercise_three_clutter.html
+        - text: "Answers"
+          href: heatmap_answers.html
+    - text: "Exercise Five"
+      menu:
+        - text: "Questions"
+          href: 3DVIZ.html
+        - text: "Answers"
+          href: 3DVIZ_ANS.html
+output: 
+  html_document:
+    theme: cerulean
+    highlight: textmate

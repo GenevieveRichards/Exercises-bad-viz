@@ -1,0 +1,113 @@
+---
+title:  Exercise Four - Heatmaps and Coloring
+author: Does the colour really mean anything?
+---
+
+<style>
+.main-container {
+  max-width: 1800px !important;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
+
+```{r}
+library(ggplot2)
+library(binr)
+library(dplyr)
+library(DT)
+library(tools)
+library(RColorBrewer)
+library(readxl)
+library(reshape2)
+library(tidyr)
+library (scales)
+library(latticeExtra)
+library(cowplot)
+source("3D_helper.R")
+source("piebarHelper.R")
+library(knitr)
+library(kableExtra)
+library(DT)
+library(GGally)
+library(readxl)
+```
+
+In this exercise we are going to explore different datasets and determine the appropriate color scheme for each. In the workshop, the shiny widget showed that colour changes represent sharp perceptual breaks. Therefore, you should only use a color break, if it represents something. For instance, two different data populations, positive and negative values in the data. 
+
+In order to generate heatmaps using ggplot2, the data needs to be of the form `<Variable One (X-Axis), Variable Two (Y-Axis), Value Column>`. Taking a look at the datasets taken from excel we can see that they are not naturally in this form. This means you need to engage in some data manipulation and use the either `gather()` or `melt()` functions to reshape the dataframe. We will use `gather()` to manioulate the data throughout these exercises for you. 
+
+Lets take a look at the first dataset below. 
+
+`DatasetOne` contains average temperature data for different cities around the world.
+
+```{r echo = FALSE}
+DatasetOne <- read_excel("average-monthly-temperatures-acr.xls")
+datatable(DatasetOne)
+```
+Lets take a look at the distribution of the data as well as the maximum and minimum temperatures to see if there are any perceptual breaks in the data.
+
+There are a few ways to explore the dataset to see if you can notice any perceptual breaks in the data.
+
+\pagebreak 
+
+1. There are several built-in commands to help you explore a dataset listed below:
+
+* `str()` - View a condensed summary of the data 
+* `head()` - View the first six rows of the data 
+* `dim()` - View the dimensions of the Dataframe 
+* `summary()` - View the summary of the Dataframe 
+* `glimpse()` - View the structure of the Dataframe 
+
+``` {r tidy = TRUE}
+datatable(DatasetOne, options = list(scrollX = TRUE))
+datatable(glimpse(DatasetOne))
+
+```
+
+2. Use visualisation to explore the distribution of the dataset. 
+
+In order to visualise the distribution of the data and to generate a heatmap, we need to manipulate the data into the form <DATE, CITY, value>. To do this we need to use `dplyr` packages function gather. The maniplated dataset is stored as `DatasetOne2`. 
+
+```{r}
+DatasetOne2 <- gather(DatasetOne, City, value, c(2:ncol(DatasetOne)))
+datatable(DatasetOne2, options = list(scrollX = TRUE))
+```
+
+- *Note: There are two different ways to do this. A histogram or Density plot.*
+
+```{r warning = FALSE}
+hist(DatasetOne2$value)
+ggplot(DatasetOne2, aes(x = value)) + geom_density()
+```
+
+Using the information that we have just found, we can determine an appropriate color scheme for this heatmap. Taking a look at the summary and distribution of the data we can notice a perceptual break in the data, negative and positive temperatures. With this in mind, `scale_fill_gradient2()` was used to generate a colour scheme with two different colors and a midpoint at 0.
+
+There are three ways to change the color sheme of the heatmap. 
+
+* scale_fill_gradient() - Two-color Gradient 
+* scale_fill_gradient2() - Gradient with a middle color and two colors that diverge from it 
+* scale_fill_gradientn() - Gradient with n colors, equally spaced. 
+
+```{r fig.width=8}
+
+DatasetOne2 <- gather(DatasetOne, City, value, c(2:ncol(DatasetOne)))
+ggplot(data = DatasetOne2, aes(x = Month, y = City)) +
+      geom_tile(aes(fill = value)) +
+      theme(
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank()
+      ) + scale_fill_gradient2(low = "darkblue", midpoint = 0, mid = "white", high = "darkred")
+
+```
+
+Three more datasets have been provided in the answer sheet notebook for you to explore and determine the correct color scheme to use. The proposed answers to these datasets are shown below. Be sure to take a go for yourself before you take a look. Remember to follow the process, explore your data first to before you choose your color scheme and generate your heatmap.  
+
+The datasets are as follows:
+
+* `DatasetTwo` -  contains level the highest level of education obtains for Canadians over the age of 15 by province. The data was obtained from "https://open.canada.ca/data/en/dataset/4e0ddb90-e4ad-421b-b074-ad6fb6a96dae. "
+* `DatasetThree` -  contains the crime statistics in America by state and type of crime. \newline
+* `DatasetFour` - contains responses from a student survey taken from "https://computerstats.wordpress.com/2016/11/26/correlation-heatmaps-r-and-excel/". We will use this data to create a correlation matrix. 
+* `DatasetFive` - contains a dataset of generated gene expression values of 30 genes and 30 patients. 
+

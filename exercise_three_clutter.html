@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Sometimes you just have to filter" />
+
+
+<title>Exercise Three - Clutter</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Home
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Exercise One
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Untitled.html">Questions</a>
+    </li>
+    <li>
+      <a href="answer_untitles.html">Answers</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Exercise Two
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Exercise_2_Pie_Chards.html">Questions</a>
+    </li>
+    <li>
+      <a href="Pie_Charts_Answers.html">Answers</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Exercise Three
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="exercise_three_clutter.html">Questions</a>
+    </li>
+    <li>
+      <a href="exer_three_ans.html">Answers</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Exercise Four
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="exercise_three_clutter.html">Questions</a>
+    </li>
+    <li>
+      <a href="heatmap_answers.html">Answers</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Exercise Five
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="3DVIZ.html">Questions</a>
+    </li>
+    <li>
+      <a href="3DVIZ_ANS.html">Answers</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Exercise Three - Clutter</h1>
+<h4 class="author"><em>Sometimes you just have to filter</em></h4>
+
+</div>
+
+
+<p>When you are preparing a visualisation for other readers to ascertain information, clutter is a common mistake that people will make. Instead of filtering out the unimportant or insignificant details, the writer will visualise all the data they have. However, if you have a large amount of data that is multi variable and each variable contains alot of factors, you need to look at filtering out some of the unimportant details. In the case of the <strong>Clutter Widget</strong> in the Shiny App, all 16 airlines as well as all the causes of delays created a cluttered visualisation. The point of the visualisation was so show that <strong>Southwest airlines co</strong> had the most airline cause delays of all the airlines.</p>
+<p>In order to show this finding better, we needed to filter out all but the top 7 or 8 airlines and not show the delays that were not caused by the airline. Have a play with the Shiny App to see the differences.</p>
+<div id="explanation-of-how-to-filter-and-remove-clutter" class="section level3">
+<h3>Explanation of How to Filter and Remove Clutter</h3>
+<p>Today we will be exploring Absenteeism statistics from a ____ workplace. This dataset was taken from UCL Machine Learning Datasets site. We will try to visualise successfully the relationships between age, the reason for being absent and the total number of hours absent from work. First of all lets take a look at the dataset stored at <code>Absenteeism_at_work</code> and the initially cluttered Box and Whiskers Chart.</p>
+<pre class="r"><code>Absenteeism_at_work &lt;- read_excel(&quot;Absenteeism_at_work.xls&quot;)
+names(Absenteeism_at_work) &lt;-gsub(&quot;\\s&quot;,&quot;_&quot;,names(Absenteeism_at_work))
+as.factor(Absenteeism_at_work$Reason_for_absence)</code></pre>
+<pre><code>##   [1] 26 0  23 7  23 23 22 23 19 22 1  1  11 11 23 14 23 21 11 23 10 11 13
+##  [24] 28 18 25 23 28 18 23 18 18 23 18 23 23 24 11 28 23 23 23 23 19 23 23
+##  [47] 23 23 22 14 0  0  23 23 0  0  18 23 0  23 23 23 23 23 0  23 23 23 23
+##  [70] 23 23 23 23 23 19 14 28 26 23 28 23 23 13 21 23 10 22 14 23 6  23 21
+##  [93] 13 28 28 28 7  23 23 19 23 26 23 26 19 22 28 28 23 22 27 19 23 23 19
+## [116] 27 18 27 23 28 27 27 27 27 27 27 27 27 27 18 18 27 23 27 27 23 22 23
+## [139] 1  11 28 23 28 22 11 1  28 23 23 23 25 18 23 23 19 28 19 19 17 22 13
+## [162] 13 14 13 11 1  26 13 6  8  28 23 14 13 23 11 13 11 11 13 14 28 14 28
+## [185] 28 23 28 13 23 28 28 13 23 23 14 28 28 19 19 12 19 13 7  0  13 28 28
+## [208] 18 19 7  28 12 13 0  0  0  0  11 13 22 19 22 10 23 10 11 23 10 13 13
+## [231] 23 13 22 11 28 28 19 1  5  26 26 18 25 1  1  25 22 26 26 19 19 0  19
+## [254] 19 23 18 13 14 28 23 23 11 23 13 25 23 23 19 8  6  11 23 19 0  9  28
+## [277] 0  0  13 9  23 28 28 26 28 0  28 7  13 24 26 26 22 0  0  1  7  22 28
+## [300] 1  0  19 28 0  23 23 28 28 23 28 10 0  0  0  1  7  23 11 23 6  28 23
+## [323] 1  11 26 0  18 11 25 28 13 12 13 28 10 15 0  0  23 12 28 28 23 28 28
+## [346] 4  28 28 23 25 25 28 13 14 26 28 28 19 23 19 23 13 23 26 3  26 26 28
+## [369] 28 28 27 7  22 28 23 27 27 10 26 27 22 27 23 23 11 27 27 10 27 27 18
+## [392] 19 28 28 28 22 22 22 28 22 0  21 23 14 13 0  0  0  28 22 19 28 28 28
+## [415] 26 22 26 23 28 23 13 28 28 28 11 13 23 10 23 28 23 28 11 8  18 25 13
+## [438] 25 28 1  23 23 28 28 23 28 0  13 28 28 28 26 28 23 23 5  21 28 11 13
+## [461] 23 25 13 7  25 26 26 28 15 23 28 9  28 23 22 22 26 28 28 23 25 25 28
+## [484] 28 26 26 28 25 25 23 23 28 28 28 28 28 28 28 23 28 23 23 23 23 23 23
+## [507] 22 4  11 26 14 28 23 23 23 23 23 23 23 26 28 1  23 10 13 10 10 23 6 
+## [530] 10 0  13 21 28 2  28 9  24 1  23 22 28 13 14 28 23 8  23 0  0  14 0 
+## [553] 23 26 28 13 28 23 13 23 23 14 18 26 18 13 23 23 23 18 12 12 25 25 13
+## [576] 25 10 18 27 18 27 27 13 27 27 13 23 1  27 28 27 27 28 27 19 27 7  27
+## [599] 27 25 13 23 27 12 27 27 13 27 25 25 27 7  27 23 25 27 27 25 27 23 25
+## [622] 25 12 27 27 27 25 27 25 19 13 27 27 27 10 13 27 7  27 23 25 27 23 27
+## [645] 23 27 27 23 13 27 27 13 19 22 13 10 19 19 13 27 7  16 23 23 10 22 27
+## [668] 19 16 27 28 19 14 27 22 19 28 8  26 13 28 14 19 22 27 23 5  28 0  27
+## [691] 0  16 10 10 22 10 6  10 23 28 27 7  23 25 10 11 7  27 26 10 22 19 19
+## [714] 27 0  0  19 13 28 13 25 22 8  10 22 26 19 6  28 6  22 23 22 22 13 14
+## [737] 11 0  0  0 
+## 28 Levels: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 21 22 ... 28</code></pre>
+<pre class="r"><code>head(Absenteeism_at_work)</code></pre>
+<pre><code>## # A tibble: 6 x 21
+##      ID Reason_for_abse… Month_of_absence Day_of_the_week Seasons
+##   &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;           &lt;dbl&gt;   &lt;dbl&gt;
+## 1    11               26                7               3       1
+## 2    36                0                7               3       1
+## 3     3               23                7               4       1
+## 4     7                7                7               5       1
+## 5    11               23                7               5       1
+## 6     3               23                7               6       1
+## # ... with 16 more variables: Transportation_expense &lt;dbl&gt;,
+## #   Distance_from_Residence_to_Work &lt;dbl&gt;, Service_time &lt;dbl&gt;, Age &lt;dbl&gt;,
+## #   `Work_load_Average/day` &lt;dbl&gt;, Hit_target &lt;dbl&gt;,
+## #   Disciplinary_failure &lt;dbl&gt;, Education &lt;dbl&gt;, Son &lt;dbl&gt;,
+## #   Social_drinker &lt;dbl&gt;, Social_smoker &lt;dbl&gt;, Pet &lt;dbl&gt;, Weight &lt;dbl&gt;,
+## #   Height &lt;dbl&gt;, Body_mass_index &lt;dbl&gt;, Absenteeism_time_in_hours &lt;dbl&gt;</code></pre>
+<pre class="r"><code>ggplot(Absenteeism_at_work, aes(x = as.factor(Reason_for_absence), y = Absenteeism_time_in_hours, fill= as.factor(Age))) + geom_boxplot() </code></pre>
+<p><img src="exercise_three_clutter_files/figure-html/unnamed-chunk-3-1.png" width="100%" height="75%" style="display: block; margin: auto;" /> As you can notict this chart is very cluttered and hard to read. There is way to much data being shown here to the extent that is unreadable. So how can we reduce this clutter?</p>
+<p>First of all, it isn’t really necessary to encode each age year a different color. In fact we could determine just as much meaning by assigning the each age a bin. If we take a look at the distribution of age in the histogram below can see that youngest person is 25 and the older person is 60, therefore we should bin the age data to 5 year intervals.</p>
+<pre class="r"><code>to_remove &lt;- c(&quot;0&quot;)
+hist(Absenteeism_at_work$Age)</code></pre>
+<p><img src="exercise_three_clutter_files/figure-html/unnamed-chunk-4-1.png" width="75%" height="75%" style="display: block; margin: auto;" /> To bin a column of a dataset we can use the <code>cut()</code> function like below. To use the <code>cut()</code> function you need to specify the column you want to bin and the starting value for each interval. For this visualisation, I have broken the age dataset into 10 year intervals. So lets take a look at the updated Box and whiskers chart.</p>
+<pre class="r"><code>Absenteeism_at_work$Age &lt;-  cut(Absenteeism_at_work$Age,c(25, 35, 45, 60))
+ggplot(Absenteeism_at_work, aes(x = as.factor(Reason_for_absence), y = Absenteeism_time_in_hours, fill= as.factor(Age))) + geom_boxplot(outlier.shape = NA) </code></pre>
+<p><img src="exercise_three_clutter_files/figure-html/unnamed-chunk-5-1.png" width="75%" height="75%" style="display: block; margin: auto;" /> Already we can see a noticable decrease in the amount of clutter in this visualisation. From here lets filter out the smallest <em>Reasons for Absence</em> in the dataset. In order to explore this easier, lets generate a bar chart for the number of hours absent so that we can easily remove the smallest amount of hours.</p>
+<pre class="r"><code>ggplot(Absenteeism_at_work, aes(x = Reason_for_absence, y = Absenteeism_time_in_hours)) + geom_bar(stat = &quot;identity&quot;) + scale_x_continuous(breaks = seq(0,28, 1 )) + theme(axis.text.x = element_text(angle = 90))</code></pre>
+<p><img src="exercise_three_clutter_files/figure-html/unnamed-chunk-6-1.png" width="75%" height="75%" style="display: block; margin: auto;" /> Looking at this dataset we can see that reasons 1, 2, 3, 4, 5, 8, 15, 16, 17, 20, 21, 24 all have a small amount of absentee hours. So we need to filter them out using dplyrs <code>filter()</code> function.</p>
+<pre class="r"><code>to_filter &lt;- c(&quot;0&quot;,&quot;1&quot;, &#39;2&#39;, &#39;3&#39;, &#39;4&#39;, &#39;5&#39;, &#39;8&#39;, &#39;15&#39;, &#39;16&#39;, &#39;17&#39;, &#39;20&#39;, &#39;21&#39;, &#39;24&#39;)
+filtered &lt;- filter(Absenteeism_at_work, !(Reason_for_absence %in% to_filter))
+
+filtered</code></pre>
+<pre><code>## # A tibble: 653 x 21
+##       ID Reason_for_abse… Month_of_absence Day_of_the_week Seasons
+##    &lt;dbl&gt;            &lt;dbl&gt;            &lt;dbl&gt;           &lt;dbl&gt;   &lt;dbl&gt;
+##  1    11               26                7               3       1
+##  2     3               23                7               4       1
+##  3     7                7                7               5       1
+##  4    11               23                7               5       1
+##  5     3               23                7               6       1
+##  6    10               22                7               6       1
+##  7    20               23                7               6       1
+##  8    14               19                7               2       1
+##  9     1               22                7               2       1
+## 10    20               11                7               4       1
+## # ... with 643 more rows, and 16 more variables:
+## #   Transportation_expense &lt;dbl&gt;, Distance_from_Residence_to_Work &lt;dbl&gt;,
+## #   Service_time &lt;dbl&gt;, Age &lt;fct&gt;, `Work_load_Average/day` &lt;dbl&gt;,
+## #   Hit_target &lt;dbl&gt;, Disciplinary_failure &lt;dbl&gt;, Education &lt;dbl&gt;,
+## #   Son &lt;dbl&gt;, Social_drinker &lt;dbl&gt;, Social_smoker &lt;dbl&gt;, Pet &lt;dbl&gt;,
+## #   Weight &lt;dbl&gt;, Height &lt;dbl&gt;, Body_mass_index &lt;dbl&gt;,
+## #   Absenteeism_time_in_hours &lt;dbl&gt;</code></pre>
+<pre class="r"><code>ggplot(filtered, aes(x = as.factor(Reason_for_absence), y = Absenteeism_time_in_hours, fill= as.factor(Age))) + geom_boxplot(outlier.shape = NA) + coord_cartesian(ylim = c(0, 100))  </code></pre>
+<p><img src="exercise_three_clutter_files/figure-html/unnamed-chunk-8-1.png" width="100%" height="75%" style="display: block; margin: auto;" /></p>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

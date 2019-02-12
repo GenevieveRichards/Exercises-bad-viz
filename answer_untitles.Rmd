@@ -1,0 +1,44 @@
+---
+title: "Answers for Exercise One - Bar Charts"
+---
+---
+```{r echo=FALSE, message = FALSE}
+library(ggplot2)
+library(binr)
+library(dplyr)
+library(DT)
+library(tools)
+library(RColorBrewer)
+library(readxl)
+library(reshape2)
+library(tidyr)
+library (scales)
+library(latticeExtra)
+library(cowplot)
+source("3D_helper.R")
+source("piebarHelper.R")
+library(knitr)
+library(kableExtra)
+library(DT)
+library(GGally)
+library(readxl)
+```
+<h5>The Data</h5>
+```{r echo = FALSE}
+  ExerciseOne <-
+    data.frame(
+      Model = c("Their Model 1", "Their Model 2", "Our Model 1", "Our Model 2"),
+      Accuracy = c(0.589415, 0.590705, 0.590867, 0.592849)
+    )
+head(ExerciseOne)
+```
+
+<h5>The Answer</h5>
+
+If your rendered plot looks similar to the plot below, you have successfully created a visualisation that does not mislead your audience. 
+
+Note: You did not need to choose the same color scheme as below. As long as you chose a neutral color scheme and the two different types of models are colored the same then you have correctly completed this exercise. 
+
+```{r echo = FALSE}
+  ggplot(data = ExerciseOne, aes(x = Model, y = Accuracy, fill = Model)) + geom_bar(stat ="identity") + coord_cartesian(ylim = c(0, 1)) + scale_fill_manual(values = c("lightskyblue3", "lightskyblue3", "yellow4", "yellow4"))
+```

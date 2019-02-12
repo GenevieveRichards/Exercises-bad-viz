@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="What are the alternatives?" />
+
+
+<title>Exercise Five - 3D Visualisations</title>
+
+<script src="site_libs/jquery-1.12.4/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/htmlwidgets-1.3/htmlwidgets.js"></script>
+<link href="site_libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="site_libs/datatables-binding-0.5/datatables.js"></script>
+<link href="site_libs/dt-core-1.10.16/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="site_libs/dt-core-1.10.16/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="site_libs/dt-core-1.10.16/js/jquery.dataTables.min.js"></script>
+<link href="site_libs/crosstalk-1.0.0/css/crosstalk.css" rel="stylesheet" />
+<script src="site_libs/crosstalk-1.0.0/js/crosstalk.min.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Home
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Exercise One
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Untitled.html">Questions</a>
+    </li>
+    <li>
+      <a href="answer_untitles.html">Answers</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Exercise Two
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Exercise_2_Pie_Chards.html">Questions</a>
+    </li>
+    <li>
+      <a href="Pie_Charts_Answers.html">Answers</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Exercise Three
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="exercise_three_clutter.html">Questions</a>
+    </li>
+    <li>
+      <a href="exer_three_ans.html">Answers</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Exercise Four
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="exercise_three_clutter.html">Questions</a>
+    </li>
+    <li>
+      <a href="heatmap_answers.html">Answers</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Exercise Five
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="3DVIZ.html">Questions</a>
+    </li>
+    <li>
+      <a href="3DVIZ_ANS.html">Answers</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Exercise Five - 3D Visualisations</h1>
+<h4 class="author"><em>What are the alternatives?</em></h4>
+
+</div>
+
+
+<style>
+.main-container {
+  max-width: 1800px !important;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
+<p>The shiny app highlights one of the main issues faced when using 3D column charts to visualisation multi-dimensional data. It demonstrated that as the data becomes more dense it becomes almost impossible to read the data accurately and determine patterns within said data. As you might have notices, this is due to the columns in the front blocking those in the back completely. Also, it is very hard for the reader to judge the values of those bars that are not hidden. For instance, if you take a look at the 3D visualisation below, taken from the shiny app, can you tell me the value of the front blue bar? Did you determine the value to be 40?</p>
+<p>Based on this, this activity is not going to concentrate on how to make 3D visualisation in R but on the alternative available to display this information. However, the code for the 3D visualisations will be made visible in the worksheet for your perusal.</p>
+<p><img src="3DVIZ_files/figure-html/unnamed-chunk-2-1.png" width="70%" /> Lets take a look at a 3D visualisation replicated from a scientific publication online. The data is the gene <strong>Hypermethylation</strong> profile for Human Cancer taken from <a href="http://cancerres.aacrjournals.org/content/61/8/3225.figures-only" class="uri">http://cancerres.aacrjournals.org/content/61/8/3225.figures-only</a>. The data used for this visualisation is stored in a dataframe at <code>hypermthylation</code> and the dataframe is printed below.</p>
+<p><div id="htmlwidget-79994d6eadabded9f2ee" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-79994d6eadabded9f2ee">{"x":{"filter":"none","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80","81","82","83","84","85","86","87","88","89","90","91","92","93","94","95","96","97","98","99","100","101","102","103","104","105","106","107","108","109","110","111","112","113","114","115","116","117","118","119","120","121","122","123","124","125","126","127","128","129","130","131","132","133","134","135","136","137","138","139","140","141","142","143","144","145","146","147","148","149","150","151","152","153","154","155","156","157","158","159","160","161","162","163","164","165"],["Colon","Breast","Ovary","Uterus","Lung","Head-Neck","Leukemia","Lymphoma","Brain","Kidney","Bladder","Esophagus","Stomach","Pancreas","Liver","Colon","Breast","Ovary","Uterus","Lung","Head-Neck","Leukemia","Lymphoma","Brain","Kidney","Bladder","Esophagus","Stomach","Pancreas","Liver","Colon","Breast","Ovary","Uterus","Lung","Head-Neck","Leukemia","Lymphoma","Brain","Kidney","Bladder","Esophagus","Stomach","Pancreas","Liver","Colon","Breast","Ovary","Uterus","Lung","Head-Neck","Leukemia","Lymphoma","Brain","Kidney","Bladder","Esophagus","Stomach","Pancreas","Liver","Colon","Breast","Ovary","Uterus","Lung","Head-Neck","Leukemia","Lymphoma","Brain","Kidney","Bladder","Esophagus","Stomach","Pancreas","Liver","Colon","Breast","Ovary","Uterus","Lung","Head-Neck","Leukemia","Lymphoma","Brain","Kidney","Bladder","Esophagus","Stomach","Pancreas","Liver","Colon","Breast","Ovary","Uterus","Lung","Head-Neck","Leukemia","Lymphoma","Brain","Kidney","Bladder","Esophagus","Stomach","Pancreas","Liver","Colon","Breast","Ovary","Uterus","Lung","Head-Neck","Leukemia","Lymphoma","Brain","Kidney","Bladder","Esophagus","Stomach","Pancreas","Liver","Colon","Breast","Ovary","Uterus","Lung","Head-Neck","Leukemia","Lymphoma","Brain","Kidney","Bladder","Esophagus","Stomach","Pancreas","Liver","Colon","Breast","Ovary","Uterus","Lung","Head-Neck","Leukemia","Lymphoma","Brain","Kidney","Bladder","Esophagus","Stomach","Pancreas","Liver","Colon","Breast","Ovary","Uterus","Lung","Head-Neck","Leukemia","Lymphoma","Brain","Kidney","Bladder","Esophagus","Stomach","Pancreas","Liver"],["p16","p16","p16","p16","p16","p16","p16","p16","p16","p16","p16","p16","p16","p16","p16","p14","p14","p14","p14","p14","p14","p14","p14","p14","p14","p14","p14","p14","p14","p14","MGMT","MGMT","MGMT","MGMT","MGMT","MGMT","MGMT","MGMT","MGMT","MGMT","MGMT","MGMT","MGMT","MGMT","MGMT","hMLH1","hMLH1","hMLH1","hMLH1","hMLH1","hMLH1","hMLH1","hMLH1","hMLH1","hMLH1","hMLH1","hMLH1","hMLH1","hMLH1","hMLH1","BRCA1","BRCA1","BRCA1","BRCA1","BRCA1","BRCA1","BRCA1","BRCA1","BRCA1","BRCA1","BRCA1","BRCA1","BRCA1","BRCA1","BRCA1","GSTP1","GSTP1","GSTP1","GSTP1","GSTP1","GSTP1","GSTP1","GSTP1","GSTP1","GSTP1","GSTP1","GSTP1","GSTP1","GSTP1","GSTP1","DAPK","DAPK","DAPK","DAPK","DAPK","DAPK","DAPK","DAPK","DAPK","DAPK","DAPK","DAPK","DAPK","DAPK","DAPK","CDH1","CDH1","CDH1","CDH1","CDH1","CDH1","CDH1","CDH1","CDH1","CDH1","CDH1","CDH1","CDH1","CDH1","CDH1","TIMP-3","TIMP-3","TIMP-3","TIMP-3","TIMP-3","TIMP-3","TIMP-3","TIMP-3","TIMP-3","TIMP-3","TIMP-3","TIMP-3","TIMP-3","TIMP-3","TIMP-3","p73","p73","p73","p73","p73","p73","p73","p73","p73","p73","p73","p73","p73","p73","p73","APC","APC","APC","APC","APC","APC","APC","APC","APC","APC","APC","APC","APC","APC","APC"],[0.37,0.17,0.18,0.2,0.31,0.27,0.01,0.48,0.3,0.23,0.9,0.33,0.36,0.39,0.15,0.28,0,0.05,0.16,0.06,0.04,0.05,0,0.09,0.13,0.05,0.08,0.26,0,0,0,0,null,0,null,0.62,0.24,null,null,null,null,null,null,null,null,0.39,0,0,0,0.21,0.32,0.06,0.25,0.34,0.08,0.04,0.2,0.16,0.11,0,0,0.13,0.19,null,0.04,null,0,null,null,null,null,null,null,null,0,0.04,0.31,0,0,0.09,0,0,0.02,0.05,0.2,0,0.07,0,0,0.65,0.13,0.07,0.09,null,0.16,0.18,0.09,0.72,null,null,0.09,null,null,null,0,null,0.42,null,null,null,null,0.4,null,null,null,null,0.84,null,null,null,0.27,0.27,null,null,0.19,null,null,null,0.26,0.78,null,null,null,null,0.05,0,0,null,null,0,null,0.31,0.3,0,0,null,null,null,null,null,0.18,0.05,0,null,0,0,null,null,0,0.08,0.1,0.15,0.34,0.33,0.33]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>TumorTypes<\/th>\n      <th>genes<\/th>\n      <th>value<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":3},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script> The 3D column chart for this data is shown below. There is only one R library that could be found to create 3D column charts, <code>latticeExtra</code> and the documentation for the library can be found at <a href="https://cran.r-project.org/web/packages/latticeExtra/latticeExtra.pdf" class="uri">https://cran.r-project.org/web/packages/latticeExtra/latticeExtra.pdf</a> and the quality and manipulation of these visualisations is limited compared on <code>ggplot2</code>.</p>
+<pre class="r"><code>cloud(value ~ as.factor(TumorTypes) + as.factor(genes), 
+      hypermthylation, panel.3d.cloud=panel.3dbars,
+      xbase=0.3,  
+      ybase=0.3, 
+      zlab = NULL,
+      groups = genes,
+      col.facet = c(&quot;blue&quot;, &quot;yellow&quot;, &quot;purple&quot;, &quot;orange&quot;, &quot;green&quot;, &quot;purple&quot;, &quot;pink&quot;),
+                par.settings = list(axis.line = list(col = 0),
+                                               clip =list(panel=&quot;off&quot;), 
+                                    axis.text = list(cex = 0.4),
+                                                              layout.heights =
+                                                list(top.padding = 10,
+                                                     main.key.padding = -30,
+                                                     key.axis.padding = 0,
+                                                     axis.xlab.padding = -15,
+                                                     xlab.key.padding = -15,
+                                                     key.sub.padding = -15,
+                                                     bottom.padding = 30)
+          ),
+      scales=list(arrows=FALSE, col=1), xlab = NULL, ylab = NULL, main = NULL,
+      par.box = list(col = NA), lcol=NULL
+)</code></pre>
+<p><img src="3DVIZ_files/figure-html/unnamed-chunk-4-1.png" width="70%" /> The 3D column chart above is very cluttered and the columns towards the back are occluded by the front columns. So, lets explore the alternatives to a 3D column chart to display multi dimensional data.</p>
+<div id="so-what-are-the-different-alternatives-to-a-3d-column-chart" class="section level3">
+<h3>So what are the different alternatives to a 3D column chart?</h3>
+<p><strong>1. Clustered Bar Chart </strong></p>
+<p>A clustered/dodge bar chart takes a 3D bar chart spreads the information out across the X-axis, <strong>portraying</strong> the third variable using color. The <strong>Clustered Bar Chart</strong> is one of the simplest ways to encode three variables clearly if there isn’t too factors. However, if there are lots of factors in the third variable, as is the case here with the variable <code>TumorTypes</code> it becomes difficult to interpret individual factors.</p>
+<p>Note: There is missing data in this dataset, the <strong>Clustered Bar Chart</strong> does not allow you to easily identify that this is the case.</p>
+<pre class="r"><code>ggplot(hypermthylation, aes(x = genes, y = value, fill = TumorTypes)) + 
+  geom_bar(position = &quot;dodge&quot;, stat = &quot;identity&quot;) + 
+    theme(
+    legend.title = element_blank(),
+    axis.text.x = element_text(angle = 90, hjust = 1)
+  ) + guides(color = guide_legend(nrow = 5))</code></pre>
+<p><img src="3DVIZ_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p><strong>2. Faceted bar charts</strong></p>
+<p>A better option is to use a facetted bar charts which separates each factor in the third variable, <code>Tumor Types</code>, into its own plot area of the chart. In this chart type, there is no concern about the number of factors in the third variable as there was in the <strong>Clustered Bar Chart</strong>. It is also easier to determine the values of the bar chart. Although, it is hard to compare values across factors with <strong>Faceted Bar Charts</strong> as they are no longer next to each other.</p>
+<p>Also, unlike the <strong>Clustered Bar Chart</strong> the <strong>Faceted Bar Chart</strong> makes it easier to identify missing data.</p>
+<pre class="r"><code>ggplot(hypermthylation, aes(x = genes, y = value, fill = TumorTypes)) + 
+  geom_bar(position = &quot;dodge&quot;, stat = &quot;identity&quot;) + facet_grid(rows = vars(TumorTypes))  + 
+    theme(
+    legend.title = element_blank(),
+    axis.text.x = element_text(angle = 90, hjust = 1),
+    axis.text.y = element_text(size = 3), 
+    strip.text.y = element_text(size = 3)
+  ) + guides(color = guide_legend(nrow = 8))</code></pre>
+<p><img src="3DVIZ_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p><strong>3. Parallel Coordinates</strong></p>
+<p><strong>Parallel Coordinates</strong> charts are ideal for comparing multiple variables in multidimensional datasets and allows the reader to easily see the relationships between them. The axes represent different variables in the dataset and the values are plotted as a series of lines that connected across all the axes. This visualization is closely related to time series visualization, however the variables do not have a natural order like time series variables. Therefore, different axis arrangements may be of interest.</p>
+<p>Note: The <code>ggparcoord</code> function will not visualise any factors of a variable that contain missing data. In order to visualise all the factors all missing data was replaced with -0.05. This means that missing data is not identifiable, however if your dataset no missing information this chart makes it very easy to identify patterns in the data.</p>
+<pre class="r"><code>hypermthylation1[is.na(hypermthylation1)] &lt;- -0.05
+ggparcoord(hypermthylation1,  columns = 2:ncol(hypermthylation1), groupColumn = &#39;TumorTypes&#39;, scale = &#39;globalminmax&#39;) +   theme(
+    legend.title = element_blank(),
+    axis.text.x = element_text(angle = 90, hjust = 1)
+  ) + ylim(c(-0.05, 1)) + geom_point() + guides(color = guide_legend(nrow = 8))</code></pre>
+<p><img src="3DVIZ_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p><strong>Parallel Coordinates</strong> can also be useful in identifying patterns easily for a large amount of data. Lets take a look at following <strong>Parallel Coordinates</strong> chart comparing Red and White wine data. From this chart, we can identify that <em>white wine</em> typically has higher sulphar dioxide levels and <em>red wine</em> has high levels of fixed acidity, volatile acidity and chlorides.</p>
+<p><img src="3DVIZ_files/figure-html/unnamed-chunk-8-1.png" width="672" /> <strong>4. Scatter Dot Plots </strong></p>
+<p><strong>Scatter Dot Plots</strong> are useful to visualise for multi-dimensional datasets, as like <strong>Clustered Bar Charts</strong>, the third variable is encoded using color. They also have the added benefit to encode a fourth variable using <strong>size</strong> to embed a second continuous variable.</p>
+<pre class="r"><code>ggplot(hypermthylation, aes(y = value, x = genes, col = TumorTypes)) + 
+   geom_point(alpha = 0.4, size = 3) +
+    theme(
+    legend.title = element_blank(),
+    axis.text.x = element_text(angle = 90, hjust = 1)
+  ) + guides(size=guide_legend(nrow=1), color = guide_legend(nrow = 8))</code></pre>
+<p><img src="3DVIZ_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<h4>
+<strong>Question</strong>
+</h4>
+<p>Now it’s your turn to have a go at creating alterntive charts for the following Dataset that contains air quality data. The dataset is stored at <code>air_quality</code> and shown below. We are interested in exploring the relationship between<code>geo_type_name</code> vs <code>geo_entity_id</code>/<code>geo_entity_name</code> vs the measures at <code>data_valuemessage</code>.</p>
+<pre class="r"><code>air_quality &lt;- read.csv(&quot;Air_Quality.csv&quot;)
+air_quality &lt;-dplyr:: filter(air_quality, year_description == &#39;Annual    2009-2010&#39;)
+datatable(air_quality, options = list(scrollX = TRUE))</code></pre>
+<p><div id="htmlwidget-bab4b166f8aba00146d9" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-bab4b166f8aba00146d9">{"x":{"filter":"none","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31","32","33","34","35","36","37","38","39","40","41","42","43","44","45","46","47","48","49","50","51","52","53","54","55","56","57","58","59","60","61","62","63","64","65","66","67","68","69","70","71","72","73","74","75","76","77","78","79","80","81","82","83","84","85","86","87","88","89","90","91","92","93","94","95","96","97","98","99","100","101","102","103","104","105","106","107","108","109","110","111","112","113","114","115","116","117","118","119","120","121","122","123","124","125","126","127","128","129","130","131","132","133","134","135","136","137","138","139","140","141","142","143","144","145","146","147","148","149","150","151","152","153","154","155","156","157","158","159","160","161","162","163","164","165","166","167","168","169","170","171","172","173","174","175","176","177","178","179","180","181","182","183","184","185","186","187","188","189","190","191","192","193","194","195","196","197","198","199","200","201","202","203","204","205","206","207","208","209","210","211","212","213","214","215","216","217","218","219","220","221","222","223","224","225","226","227","228","229","230","231","232","233","234","235","236","237","238","239","240"],[131694,131695,131696,131697,131698,131693,131651,131652,131653,131654,131655,131656,131657,131658,131659,131660,131661,131662,131663,131664,131665,131666,131667,131668,131669,131610,131670,131671,131672,131673,131674,131675,131676,131677,131678,131679,131680,131681,131682,131683,131684,131685,131686,131687,131688,131689,131690,131691,131692,131646,131647,131648,131649,131650,131645,131603,131604,131605,131606,131607,131608,131609,131611,131612,131613,131614,131615,131616,131617,131618,131619,131620,131621,131622,131623,131624,131625,131626,131627,131628,131629,131630,131631,131632,131633,131634,131635,131636,131637,131638,131639,131640,131641,131642,131643,131644,131742,131743,131744,131745,131746,131741,131699,131700,131701,131702,131703,131704,131705,131706,131707,131708,131709,131710,131711,131712,131713,131714,131715,131716,131717,131718,131719,131720,131721,131722,131723,131724,131725,131726,131727,131728,131729,131730,131731,131732,131733,131734,131735,131736,131737,131738,131739,131740,131790,131791,131792,131793,131794,131789,131747,131748,131749,131750,131751,131752,131753,131754,131755,131756,131757,131758,131759,131760,131761,131762,131763,131764,131765,131766,131767,131768,131769,131770,131771,131772,131773,131774,131775,131776,131777,131778,131779,131780,131781,131782,131783,131784,131785,131786,131787,131788,131838,131839,131840,131841,131842,131837,131795,131796,131797,131798,131799,131800,131801,131802,131803,131804,131805,131806,131807,131808,131809,131810,131811,131812,131813,131814,131815,131816,131817,131818,131819,131820,131821,131822,131823,131824,131825,131826,131827,131828,131829,131830,131831,131832,131833,131834,131835,131836],[663,663,663,663,663,663,663,663,663,663,663,663,663,663,663,663,663,663,663,663,663,663,663,663,663,662,663,663,663,663,663,663,663,663,663,663,663,663,663,663,663,663,663,663,663,663,663,663,663,662,662,662,662,662,662,662,662,662,662,662,662,662,662,662,662,662,662,662,662,662,662,662,662,662,662,662,662,662,662,662,662,662,662,662,662,662,662,662,662,662,662,662,662,662,662,662,664,664,664,664,664,664,664,664,664,664,664,664,664,664,664,664,664,664,664,664,664,664,664,664,664,664,664,664,664,664,664,664,664,664,664,664,664,664,664,664,664,664,664,664,664,664,664,664,665,665,665,665,665,665,665,665,665,665,665,665,665,665,665,665,665,665,665,665,665,665,665,665,665,665,665,665,665,665,665,665,665,665,665,665,665,665,665,665,665,665,665,665,665,665,665,665,666,666,666,666,666,666,666,666,666,666,666,666,666,666,666,666,666,666,666,666,666,666,666,666,666,666,666,666,666,666,666,666,666,666,666,666,666,666,666,666,666,666,666,666,666,666,666,666],["    Elemental Carbon (EC)","    Elemental Carbon (EC)","    Elemental Carbon (EC)","    Elemental Carbon (EC)","    Elemental Carbon (EC)","    Elemental Carbon (EC)","    Elemental Carbon (EC)","    Elemental Carbon (EC)","    Elemental Carbon (EC)","    Elemental Carbon (EC)","    Elemental Carbon (EC)","    Elemental Carbon (EC)","    Elemental Carbon (EC)","    Elemental Carbon (EC)","    Elemental Carbon (EC)","    Elemental Carbon (EC)","    Elemental Carbon (EC)","    Elemental Carbon (EC)","    Elemental Carbon (EC)","    Elemental Carbon (EC)","    Elemental Carbon (EC)","    Elemental Carbon (EC)","    Elemental Carbon (EC)","    Elemental Carbon (EC)","    Elemental Carbon (EC)","    Fine Particulate Matter (PM2.5)","    Elemental Carbon (EC)","    Elemental Carbon (EC)","    Elemental Carbon (EC)","    Elemental Carbon (EC)","    Elemental Carbon (EC)","    Elemental Carbon (EC)","    Elemental Carbon (EC)","    Elemental Carbon (EC)","    Elemental Carbon (EC)","    Elemental Carbon (EC)","    Elemental Carbon (EC)","    Elemental Carbon (EC)","    Elemental Carbon (EC)","    Elemental Carbon (EC)","    Elemental Carbon (EC)","    Elemental Carbon (EC)","    Elemental Carbon (EC)","    Elemental Carbon (EC)","    Elemental Carbon (EC)","    Elemental Carbon (EC)","    Elemental Carbon (EC)","    Elemental Carbon (EC)","    Elemental Carbon (EC)","    Fine Particulate Matter (PM2.5)","    Fine Particulate Matter (PM2.5)","    Fine Particulate Matter (PM2.5)","    Fine Particulate Matter (PM2.5)","    Fine Particulate Matter (PM2.5)","    Fine Particulate Matter (PM2.5)","    Fine Particulate Matter (PM2.5)","    Fine Particulate Matter (PM2.5)","    Fine Particulate Matter (PM2.5)","    Fine Particulate Matter (PM2.5)","    Fine Particulate Matter (PM2.5)","    Fine Particulate Matter (PM2.5)","    Fine Particulate Matter (PM2.5)","    Fine Particulate Matter (PM2.5)","    Fine Particulate Matter (PM2.5)","    Fine Particulate Matter (PM2.5)","    Fine Particulate Matter (PM2.5)","    Fine Particulate Matter (PM2.5)","    Fine Particulate Matter (PM2.5)","    Fine Particulate Matter (PM2.5)","    Fine Particulate Matter (PM2.5)","    Fine Particulate Matter (PM2.5)","    Fine Particulate Matter (PM2.5)","    Fine Particulate Matter (PM2.5)","    Fine Particulate Matter (PM2.5)","    Fine Particulate Matter (PM2.5)","    Fine Particulate Matter (PM2.5)","    Fine Particulate Matter (PM2.5)","    Fine Particulate Matter (PM2.5)","    Fine Particulate Matter (PM2.5)","    Fine Particulate Matter (PM2.5)","    Fine Particulate Matter (PM2.5)","    Fine Particulate Matter (PM2.5)","    Fine Particulate Matter (PM2.5)","    Fine Particulate Matter (PM2.5)","    Fine Particulate Matter (PM2.5)","    Fine Particulate Matter (PM2.5)","    Fine Particulate Matter (PM2.5)","    Fine Particulate Matter (PM2.5)","    Fine Particulate Matter (PM2.5)","    Fine Particulate Matter (PM2.5)","    Fine Particulate Matter (PM2.5)","    Fine Particulate Matter (PM2.5)","    Fine Particulate Matter (PM2.5)","    Fine Particulate Matter (PM2.5)","    Fine Particulate Matter (PM2.5)","    Fine Particulate Matter (PM2.5)","    Nitric Oxide (NO)","    Nitric Oxide (NO)","    Nitric Oxide (NO)","    Nitric Oxide (NO)","    Nitric Oxide (NO)","    Nitric Oxide (NO)","    Nitric Oxide (NO)","    Nitric Oxide (NO)","    Nitric Oxide (NO)","    Nitric Oxide (NO)","    Nitric Oxide (NO)","    Nitric Oxide (NO)","    Nitric Oxide (NO)","    Nitric Oxide (NO)","    Nitric Oxide (NO)","    Nitric Oxide (NO)","    Nitric Oxide (NO)","    Nitric Oxide (NO)","    Nitric Oxide (NO)","    Nitric Oxide (NO)","    Nitric Oxide (NO)","    Nitric Oxide (NO)","    Nitric Oxide (NO)","    Nitric Oxide (NO)","    Nitric Oxide (NO)","    Nitric Oxide (NO)","    Nitric Oxide (NO)","    Nitric Oxide (NO)","    Nitric Oxide (NO)","    Nitric Oxide (NO)","    Nitric Oxide (NO)","    Nitric Oxide (NO)","    Nitric Oxide (NO)","    Nitric Oxide (NO)","    Nitric Oxide (NO)","    Nitric Oxide (NO)","    Nitric Oxide (NO)","    Nitric Oxide (NO)","    Nitric Oxide (NO)","    Nitric Oxide (NO)","    Nitric Oxide (NO)","    Nitric Oxide (NO)","    Nitric Oxide (NO)","    Nitric Oxide (NO)","    Nitric Oxide (NO)","    Nitric Oxide (NO)","    Nitric Oxide (NO)","    Nitric Oxide (NO)","    Nitrogen Dioxide (NO2)","    Nitrogen Dioxide (NO2)","    Nitrogen Dioxide (NO2)","    Nitrogen Dioxide (NO2)","    Nitrogen Dioxide (NO2)","    Nitrogen Dioxide (NO2)","    Nitrogen Dioxide (NO2)","    Nitrogen Dioxide (NO2)","    Nitrogen Dioxide (NO2)","    Nitrogen Dioxide (NO2)","    Nitrogen Dioxide (NO2)","    Nitrogen Dioxide (NO2)","    Nitrogen Dioxide (NO2)","    Nitrogen Dioxide (NO2)","    Nitrogen Dioxide (NO2)","    Nitrogen Dioxide (NO2)","    Nitrogen Dioxide (NO2)","    Nitrogen Dioxide (NO2)","    Nitrogen Dioxide (NO2)","    Nitrogen Dioxide (NO2)","    Nitrogen Dioxide (NO2)","    Nitrogen Dioxide (NO2)","    Nitrogen Dioxide (NO2)","    Nitrogen Dioxide (NO2)","    Nitrogen Dioxide (NO2)","    Nitrogen Dioxide (NO2)","    Nitrogen Dioxide (NO2)","    Nitrogen Dioxide (NO2)","    Nitrogen Dioxide (NO2)","    Nitrogen Dioxide (NO2)","    Nitrogen Dioxide (NO2)","    Nitrogen Dioxide (NO2)","    Nitrogen Dioxide (NO2)","    Nitrogen Dioxide (NO2)","    Nitrogen Dioxide (NO2)","    Nitrogen Dioxide (NO2)","    Nitrogen Dioxide (NO2)","    Nitrogen Dioxide (NO2)","    Nitrogen Dioxide (NO2)","    Nitrogen Dioxide (NO2)","    Nitrogen Dioxide (NO2)","    Nitrogen Dioxide (NO2)","    Nitrogen Dioxide (NO2)","    Nitrogen Dioxide (NO2)","    Nitrogen Dioxide (NO2)","    Nitrogen Dioxide (NO2)","    Nitrogen Dioxide (NO2)","    Nitrogen Dioxide (NO2)","    Ozone (O3)","    Ozone (O3)","    Ozone (O3)","    Ozone (O3)","    Ozone (O3)","    Ozone (O3)","    Ozone (O3)","    Ozone (O3)","    Ozone (O3)","    Ozone (O3)","    Ozone (O3)","    Ozone (O3)","    Ozone (O3)","    Ozone (O3)","    Ozone (O3)","    Ozone (O3)","    Ozone (O3)","    Ozone (O3)","    Ozone (O3)","    Ozone (O3)","    Ozone (O3)","    Ozone (O3)","    Ozone (O3)","    Ozone (O3)","    Ozone (O3)","    Ozone (O3)","    Ozone (O3)","    Ozone (O3)","    Ozone (O3)","    Ozone (O3)","    Ozone (O3)","    Ozone (O3)","    Ozone (O3)","    Ozone (O3)","    Ozone (O3)","    Ozone (O3)","    Ozone (O3)","    Ozone (O3)","    Ozone (O3)","    Ozone (O3)","    Ozone (O3)","    Ozone (O3)","    Ozone (O3)","    Ozone (O3)","    Ozone (O3)","    Ozone (O3)","    Ozone (O3)","    Ozone (O3)"],["   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration","   Concentration"],["Borough","Borough","Borough","Borough","Borough","Citywide","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","Borough","Borough","Borough","Borough","Borough","Citywide","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","Borough","Borough","Borough","Borough","Borough","Citywide","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","Borough","Borough","Borough","Borough","Borough","Citywide","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","Borough","Borough","Borough","Borough","Borough","Citywide","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42","UHF42"],[1,2,3,4,5,1,101,102,103,104,105,106,107,201,202,203,204,205,206,207,208,209,210,211,301,201,302,303,304,305,306,307,308,309,310,401,402,403,404,405,406,407,408,409,410,501,502,503,504,1,2,3,4,5,1,101,102,103,104,105,106,107,202,203,204,205,206,207,208,209,210,211,301,302,303,304,305,306,307,308,309,310,401,402,403,404,405,406,407,408,409,410,501,502,503,504,1,2,3,4,5,1,101,102,103,104,105,106,107,201,202,203,204,205,206,207,208,209,210,211,301,302,303,304,305,306,307,308,309,310,401,402,403,404,405,406,407,408,409,410,501,502,503,504,1,2,3,4,5,1,101,102,103,104,105,106,107,201,202,203,204,205,206,207,208,209,210,211,301,302,303,304,305,306,307,308,309,310,401,402,403,404,405,406,407,408,409,410,501,502,503,504,1,2,3,4,5,1,101,102,103,104,105,106,107,201,202,203,204,205,206,207,208,209,210,211,301,302,303,304,305,306,307,308,309,310,401,402,403,404,405,406,407,408,409,410,501,502,503,504],["Bronx","Brooklyn","Manhattan","Queens","Staten Island","New York City","Kingsbridge - Riverdale","Northeast Bronx","Fordham - Bronx Pk","Pelham - Throgs Neck","Crotona -Tremont","High Bridge - Morrisania","Hunts Point - Mott Haven","Greenpoint","Downtown - Heights - Slope","Bedford Stuyvesant - Crown Heights","East New York","Sunset Park","Borough Park","East Flatbush - Flatbush","Canarsie - Flatlands","Bensonhurst - Bay Ridge","Coney Island - Sheepshead Bay","Williamsburg - Bushwick","Washington Heights","Greenpoint","Central Harlem - Morningside Heights","East Harlem","Upper West Side","Upper East Side","Chelsea - Clinton","Gramercy Park - Murray Hill","Greenwich Village - SoHo","Union Square - Lower East Side","Lower Manhattan","Long Island City - Astoria","West Queens","Flushing - Clearview","Bayside - Little Neck","Ridgewood - Forest Hills","Fresh Meadows","Southwest Queens","Jamaica","Southeast Queens","Rockaways","Port Richmond","Stapleton - St. George","Willowbrook","South Beach - Tottenville","Bronx","Brooklyn","Manhattan","Queens","Staten Island","New York City","Kingsbridge - Riverdale","Northeast Bronx","Fordham - Bronx Pk","Pelham - Throgs Neck","Crotona -Tremont","High Bridge - Morrisania","Hunts Point - Mott Haven","Downtown - Heights - Slope","Bedford Stuyvesant - Crown Heights","East New York","Sunset Park","Borough Park","East Flatbush - Flatbush","Canarsie - Flatlands","Bensonhurst - Bay Ridge","Coney Island - Sheepshead Bay","Williamsburg - Bushwick","Washington Heights","Central Harlem - Morningside Heights","East Harlem","Upper West Side","Upper East Side","Chelsea - Clinton","Gramercy Park - Murray Hill","Greenwich Village - SoHo","Union Square - Lower East Side","Lower Manhattan","Long Island City - Astoria","West Queens","Flushing - Clearview","Bayside - Little Neck","Ridgewood - Forest Hills","Fresh Meadows","Southwest Queens","Jamaica","Southeast Queens","Rockaways","Port Richmond","Stapleton - St. George","Willowbrook","South Beach - Tottenville","Bronx","Brooklyn","Manhattan","Queens","Staten Island","New York City","Kingsbridge - Riverdale","Northeast Bronx","Fordham - Bronx Pk","Pelham - Throgs Neck","Crotona -Tremont","High Bridge - Morrisania","Hunts Point - Mott Haven","Greenpoint","Downtown - Heights - Slope","Bedford Stuyvesant - Crown Heights","East New York","Sunset Park","Borough Park","East Flatbush - Flatbush","Canarsie - Flatlands","Bensonhurst - Bay Ridge","Coney Island - Sheepshead Bay","Williamsburg - Bushwick","Washington Heights","Central Harlem - Morningside Heights","East Harlem","Upper West Side","Upper East Side","Chelsea - Clinton","Gramercy Park - Murray Hill","Greenwich Village - SoHo","Union Square - Lower East Side","Lower Manhattan","Long Island City - Astoria","West Queens","Flushing - Clearview","Bayside - Little Neck","Ridgewood - Forest Hills","Fresh Meadows","Southwest Queens","Jamaica","Southeast Queens","Rockaways","Port Richmond","Stapleton - St. George","Willowbrook","South Beach - Tottenville","Bronx","Brooklyn","Manhattan","Queens","Staten Island","New York City","Kingsbridge - Riverdale","Northeast Bronx","Fordham - Bronx Pk","Pelham - Throgs Neck","Crotona -Tremont","High Bridge - Morrisania","Hunts Point - Mott Haven","Greenpoint","Downtown - Heights - Slope","Bedford Stuyvesant - Crown Heights","East New York","Sunset Park","Borough Park","East Flatbush - Flatbush","Canarsie - Flatlands","Bensonhurst - Bay Ridge","Coney Island - Sheepshead Bay","Williamsburg - Bushwick","Washington Heights","Central Harlem - Morningside Heights","East Harlem","Upper West Side","Upper East Side","Chelsea - Clinton","Gramercy Park - Murray Hill","Greenwich Village - SoHo","Union Square - Lower East Side","Lower Manhattan","Long Island City - Astoria","West Queens","Flushing - Clearview","Bayside - Little Neck","Ridgewood - Forest Hills","Fresh Meadows","Southwest Queens","Jamaica","Southeast Queens","Rockaways","Port Richmond","Stapleton - St. George","Willowbrook","South Beach - Tottenville","Bronx","Brooklyn","Manhattan","Queens","Staten Island","New York City","Kingsbridge - Riverdale","Northeast Bronx","Fordham - Bronx Pk","Pelham - Throgs Neck","Crotona -Tremont","High Bridge - Morrisania","Hunts Point - Mott Haven","Greenpoint","Downtown - Heights - Slope","Bedford Stuyvesant - Crown Heights","East New York","Sunset Park","Borough Park","East Flatbush - Flatbush","Canarsie - Flatlands","Bensonhurst - Bay Ridge","Coney Island - Sheepshead Bay","Williamsburg - Bushwick","Washington Heights","Central Harlem - Morningside Heights","East Harlem","Upper West Side","Upper East Side","Chelsea - Clinton","Gramercy Park - Murray Hill","Greenwich Village - SoHo","Union Square - Lower East Side","Lower Manhattan","Long Island City - Astoria","West Queens","Flushing - Clearview","Bayside - Little Neck","Ridgewood - Forest Hills","Fresh Meadows","Southwest Queens","Jamaica","Southeast Queens","Rockaways","Port Richmond","Stapleton - St. George","Willowbrook","South Beach - Tottenville"],["Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010","Annual    2009-2010"],[1.3,1.1,1.5,1,0.9,1.2,1.1,1.1,1.3,1.2,1.5,1.5,1.4,1.4,1.3,1.1,1.1,1.2,1,1,0.9,1,0.9,1.2,1.4,11.4,1.3,1.4,1.3,1.5,1.8,1.8,1.8,1.6,1.5,1.3,1.3,1,1,1,1,1,1,0.9,0.7,0.9,0.9,0.9,0.8,10.8,10.3,12.4,9.7,9.2,10.6,10.1,9.7,11,10.2,12.1,11.7,10.9,10.8,10.7,10.1,10.5,10.2,10.4,9.4,9.7,9.5,11.1,11.7,10.8,10.6,11.8,12.7,14,14.9,12.6,12.4,12.3,10.9,10.6,9.6,9.3,9.9,9.5,9.5,9.7,9.2,8.9,9.3,9.2,9.1,9,24.3,24.7,40.3,23.2,15.2,27.1,18.5,19.1,24.1,23,29.8,28.7,26.7,29.6,28.1,29.8,24.5,24.2,23.7,26.5,18.4,20.6,18.1,28.3,36.4,27.2,27.1,37.8,44.6,53.6,52.4,49.6,39.7,34.6,30.5,28.8,21.2,19.1,25.6,23.3,21.5,26,20.5,16,17.2,15.5,14.5,13.5,23.1,24.4,32.2,21.9,17.4,24.8,18.7,21.3,23,21.6,25.6,26.8,25,25.9,26.8,26.3,23.2,23.8,24.7,24.7,20.9,23.3,22.3,26.3,25.9,27.8,27.4,29.3,33.2,38.2,41.8,32.6,30.7,34.8,24.8,24.9,21.3,19.2,22.4,21.6,22.2,22.8,20.9,18.8,19.8,17.8,16.3,15.7,27.7,27.4,23.5,28.3,29.8,27,28.4,28.6,27.5,28.7,26.7,26.3,27.7,27.1,26.1,26.4,28,27.7,27.1,27.1,29,28,28.4,26.6,25.9,25.4,25.7,24.4,23,21.3,19.3,23.8,23.9,22.7,27.6,27.3,28.6,28.5,27.9,28,28.4,27.8,28.7,30.5,29.2,29.4,30.3,30.3]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>indicator_data_id<\/th>\n      <th>indicator_id<\/th>\n      <th>name<\/th>\n      <th>Measure<\/th>\n      <th>geo_type_name<\/th>\n      <th>geo_entity_id<\/th>\n      <th>geo_entity_name<\/th>\n      <th>year_description<\/th>\n      <th>data_valuemessage<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"scrollX":true,"columnDefs":[{"className":"dt-right","targets":[1,2,6,9]},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script> If we take a look at this 3D visualisation we can quickly determine that this is not an appropriate chart for this data. More than 50% of the data in this chart is ocluded by the front columns and the mass amount of data shown makes it very difficult to identify any insights.</p>
+<pre class="r"><code>cloud(data_valuemessage ~ as.factor(geo_entity_id) + as.factor(name), 
+      air_quality, panel.3d.cloud=panel.3dbars,
+      xbase=0.3,  
+      ybase=0.3, 
+      zlab = NULL,
+      groups = name,
+      col.facet =as.factor(air_quality$name),
+      scales=list(arrows=FALSE, col=1, x=list(rot=90)), xlab = NULL, ylab = NULL, main = NULL,
+      par.box = list(col = NA), lcol=NULL, 
+      par.settings = list(axis.line = list(col = 0),
+                                               clip =list(panel=&quot;off&quot;), 
+                                    axis.text = list(cex = 0.4),
+                          layout.heights =
+                                                list(top.padding = 10,
+                                                     main.key.padding = -30,
+                                                     key.axis.padding = 0,
+                                                     axis.xlab.padding = -15,
+                                                     xlab.key.padding = -15,
+                                                     key.sub.padding = -15,
+                                                     bottom.padding = 30)
+          )
+)</code></pre>
+<p><img src="3DVIZ_files/figure-html/unnamed-chunk-11-1.png" width="70%" /></p>
+<p>Download the <strong>Working Notebook</strong> and complete exercise under <strong>Exercise Four: 3D Visualisations</strong>. Create as 3 different charts using this data, you can include the charts you see here or come up with some alternatives. Finish the question by determining what chart you think is most appropriate. Our proposed answers are included in the <code>Answers Tab</code>.</p>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

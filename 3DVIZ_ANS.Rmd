@@ -1,0 +1,120 @@
+---
+title: 'Exercise Five - 3D Visualisations'
+author: 'Answer Sheet'
+---
+---
+```{r echo=FALSE, message = FALSE}
+library(ggplot2)
+library(binr)
+library(dplyr)
+library(DT)
+library(tools)
+library(RColorBrewer)
+library(readxl)
+library(reshape2)
+library(tidyr)
+library (scales)
+library(latticeExtra)
+library(cowplot)
+source("3D_helper.R")
+source("piebarHelper.R")
+library(knitr)
+library(kableExtra)
+library(DT)
+library(GGally)
+library(readxl)
+```
+## The Dataset ##
+
+```{r cars}
+air_quality <- read.csv("Air_Quality.csv")
+air_quality <-dplyr:: filter(air_quality, year_description == 'Annual    2009-2010')
+datatable(air_quality, options = list(scrollX = TRUE))
+```
+
+## 3D Column Chart
+
+You can also embed plots, for example:
+
+```{r out.width= "80%", out.height= "80%"}
+cloud(data_valuemessage ~ as.factor(geo_entity_id) + as.factor(name), 
+      air_quality, panel.3d.cloud=panel.3dbars,
+      xbase=0.3,  
+      ybase=0.3, 
+      zlab = NULL,
+      groups = name,
+      col.facet =as.factor(air_quality$name),
+      scales=list(arrows=FALSE, col=1, x=list(rot=90)), xlab = NULL, ylab = NULL, main = NULL,
+      par.box = list(col = NA), lcol=NULL, 
+      par.settings = list(axis.line = list(col = 0),
+                                               clip =list(panel="off"), 
+                                    axis.text = list(cex = 0.4),
+                          axis.ticks = list(cex = 0.4),
+                          layout.heights =
+                                                list(top.padding = 10,
+                                                     main.key.padding = -30,
+                                                     key.axis.padding = 0,
+                                                     axis.xlab.padding = -15,
+                                                     xlab.key.padding = -15,
+                                                     key.sub.padding = -15,
+                                                     bottom.padding = 30)
+          )
+)
+```
+
+## Answers ##
+
+ 
+
+**1. Parallel Coordinates**
+
+In order to create a parallel plot you need to manipulate the data by spreading the name variable out across the rows. 
+
+This plot shows clear spikes, no data is occluded making it easy to determine values. 
+
+```{r}
+air_quality2 <- dcast(air_quality,name~geo_entity_name, value.var = "data_valuemessage")
+ggparcoord(air_quality2,  columns = 2:ncol(air_quality2), groupColumn = 'name', scale = 'globalminmax') +   geom_point() +  theme(
+    legend.title = element_blank(),
+    axis.text.x = element_text(angle = 90, hjust = 1, size = 5)
+  ) 
+
+
+```
+
+**2. Faceted Bar Chart**
+
+```{r}
+ggplot(air_quality, aes(x = geo_entity_name, y = data_valuemessage, fill = name)) + 
+  geom_bar(position = "dodge", stat = "identity") + facet_grid(rows = vars(name))  +    
+  theme(
+    legend.title = element_blank(),
+    axis.text.x = element_text(angle = 90, hjust = 1, size = 4),
+    axis.text.y = element_text(size = 4),
+    strip.text.y = element_text(size = 6)
+  )
+```
+**3. Clustered Bar Chart**
+
+```{r out.width= "100%"}
+ggplot(air_quality, aes(x = geo_entity_name, y = data_valuemessage, fill = name)) + 
+  geom_bar(position = "dodge", stat = "identity") +         
+  theme(
+    legend.title = element_blank(),
+    axis.text.x = element_text(angle = 90, hjust = 1, size = 4),
+    axis.text.y = element_text(size = 4)
+  )
+```
+
+**4. Dot Chart** 
+
+```{r}
+ggplot(air_quality, aes(x = geo_entity_name, y = data_valuemessage,  col = name)) +
+  geom_point(size = 2, alpha = 0.6) +  theme(
+    legend.title = element_blank(),
+    axis.text.x = element_text(angle = 90, hjust = 1, size = 4),
+    axis.text.y = element_text(size = 4)
+  )
+```
+
+Based on the visualisations, the most effective charts are the **Parallel Coordinates Charts** and the **Faceted Bar Chart** as they provide information clearly without any clutter or visual occlusion. 

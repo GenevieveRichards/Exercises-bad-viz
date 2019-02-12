@@ -1,0 +1,27 @@
+---
+title:  Bad Visualisations 
+author: Lets learn how to make good ones!
+---
+---
+```{r echo=FALSE, message = FALSE}
+library(ggplot2)
+library(binr)
+library(dplyr)
+library(DT)
+library(tools)
+library(RColorBrewer)
+library(readxl)
+library(reshape2)
+library(tidyr)
+library (scales)
+library(latticeExtra)
+library(cowplot)
+source("3D_helper.R")
+source("piebarHelper.R")
+library(knitr)
+library(kableExtra)
+library(DT)
+library(GGally)
+library(readxl)
+```
+Home

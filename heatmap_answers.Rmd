@@ -1,0 +1,131 @@
+---
+title: "Heatmap Answers"
+---
+---
+```{r echo=FALSE, message = FALSE}
+library(ggplot2)
+library(binr)
+library(dplyr)
+library(DT)
+library(tools)
+library(RColorBrewer)
+library(readxl)
+library(reshape2)
+library(tidyr)
+library (scales)
+library(latticeExtra)
+library(cowplot)
+source("3D_helper.R")
+source("piebarHelper.R")
+library(knitr)
+library(kableExtra)
+library(DT)
+library(GGally)
+library(readxl)
+```
+<h5>Dataset Two - Highest level of Canadian Attainment</h5>
+
+```{r echo = FALSE}
+DatasetTwo <- read_excel("canadaeducation2.xls")
+DatasetTwo <- gather(DatasetTwo, Type, Count, 2:ncol(DatasetTwo))
+datatable(DatasetTwo )
+```
+**Histogram**
+
+Using the histogram to see the distribution of the data, we are not able to identify any perceptual breaks in the data as all the values in the data are positive and the data appears to be unimodal. Based on these findings, we can determine that the heatmap should only contain one color and for this example purple has been chosen. 
+
+```{r}
+hist(DatasetTwo$Count)
+```
+
+```{r fig.width=8, fig.height = 6, echo = FALSE}
+ggplot(data = DatasetTwo, aes(x = Type, y = Geographic_name_province_or_territory)) +
+      geom_tile(aes(fill = Count)) +
+      theme(
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(),
+        axis.text.x = element_text(angle = 30, hjust = 1)
+        ) + scale_fill_gradient2(low = "white", high = "darkblue")
+```
+
+<h5> Dataset Three </h5>
+
+```{r echo = FALSE}
+DatasetThree <- read.csv("crimeRatesByState-formatted.csv", sep = ",", header = TRUE)
+DatasetThree <- gather(DatasetThree, Type, Value, 2:ncol(DatasetThree))
+head(DatasetThree)
+```
+
+```{r fig.width = 8, echo = FALSE}
+ggplot(data = DatasetThree, aes(x = state, y = Type)) +
+      geom_tile(aes(fill = Value)) +
+      theme(
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(),
+        axis.text.x = element_text(angle = 30, hjust = 1, size = 8)
+        ) + scale_fill_gradient2(low = "white", high = "darkgreen")
+```
+ 
+ <h5> Dataset Four - Correlation matrix of a Student Survey </h5 > 
+
+```{r echo = FALSE}
+original <- read.csv("StudentSurvey.csv", header = TRUE)
+original1 <- original[,6:ncol(original)]
+DatasetFour <- cor(original1, use="na.or.complete")
+DatasetFour <- melt(DatasetFour)
+datatable(DatasetFour)
+```
+
+##Histogram**
+
+```{r}
+hist(DatasetFour$value)
+```
+
+```{r fig.width=8, fig.height = 8, echo = FALSE}
+ggplot(data = DatasetFour, aes(x = Var1, y = Var2)) +
+      geom_tile(aes(fill = value)) +
+      theme(
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_blank(),
+        axis.text.x = element_text(angle = 30, hjust = 1)
+        ) + scale_fill_gradient2(low = "orange", high = "purple")
+```
+
+<h5> Dataset Five - Gene Expression Data </h5> 
+```{r warning=FALSE, message=FALSE, echo = FALSE}
+name_genes <- paste(rep("GEN", 30), LETTERS[1:30], sep="_") # rows
+name_patients <- paste(rep("PATIENT", 30), seq(1,30,1), sep="_") # columns
+
+value_expression <- data.frame(genes = name_genes, 
+                               matrix(rnorm(600, 2, 1.8),nrow = 30, ncol = 30))
+names(value_expression)[2:21] <- name_patients
+
+DatasetFive <- melt(value_expression, id.vars = "genes")
+names(DatasetFive)[2:3] <- c("patient", "expression_level")
+datatable(DatasetFive)
+```
+
+**Histogram** 
+
+```{r}
+Expression_Level <- DatasetFive$expression_level
+hist(Expression_Level)
+```
+
+```{r echo = FALSE}
+ggplot(DatasetFive, aes(patient, genes )) +
+  geom_tile(aes(fill = expression_level)) +
+  scale_fill_gradient(low = "red", high = "green") +
+  ylab("List of genes ") +
+  xlab("List of patients") +
+  theme(legend.title = element_text(size = 10),
+        legend.text = element_text(size = 12),
+        plot.title = element_text(size=16),
+        axis.title=element_text(size=14,face="bold"),
+        axis.text.x = element_text(angle = 90, hjust = 1)) +
+  labs(fill = "Expression level")
+```

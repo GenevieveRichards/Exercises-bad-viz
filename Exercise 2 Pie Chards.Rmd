@@ -1,0 +1,120 @@
+---
+title: Exercise Two - Pie Charts
+author: When to use a Pie Chart, when to use a bar chart and when to use both together!
+---
+---
+```{r echo=FALSE, message = FALSE}
+library(ggplot2)
+library(binr)
+library(dplyr)
+library(DT)
+library(tools)
+library(RColorBrewer)
+library(readxl)
+library(reshape2)
+library(tidyr)
+library (scales)
+library(latticeExtra)
+library(cowplot)
+source("3D_helper.R")
+source("piebarHelper.R")
+library(knitr)
+library(kableExtra)
+library(DT)
+library(GGally)
+library(readxl)
+```
+
+<style>
+.main-container {
+  max-width: 1800px !important;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
+
+
+The Packages required to complete this exercise have been loaded above. These include ggplot2, dplyr, DT, tools, RColorBrewer, readxl, reshape2, tidyR, scales, cowplot. We have also preloaded our own library call PieBarViz that contains a function to create the visualisation utilizing both Pie and Bar Charts. This function is called, `pieBar` and takes the parameters: 
+
+1. Dataset \<dataframe> - dataframe must be in the format **[name, proportion]**
+2. Stacked \<Bool> - If **TRUE**, your bar chart will be stacked, If **FALSE** it will be dodge. 
+
+As mentioned in the workshop,  Pie Charts are really good if there are only 2 or 3 wedges, however if you have more wedges it is harder to visually disern exact information and to make comparisions. 
+
+There are three datasets provided below, take a look the data and determine which visualisation is most appropriate. In case you don't remember how to create Pie and Bar charts take a look at this [RStudio ggplot2 Cheat Sheet](https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf).
+
+
+### Question One 
+The first dataset we will take a look at shows the proportion of males and females in Australia. The data below is stored as `DatasetOne` and the data was taken from https://countrymeters.info/en/Australia.
+
+
+```{r, echo = FALSE }  
+DatasetOne <-
+  data.frame(
+    Sex = c("Female", "Male"),
+    Percentage = c(0.498, 0.502)
+  )
+
+datatable(DatasetOne)
+
+```
+
+
+
+What do you think would be the most appropriate way to visualise this information? Fill in the missing parameters below. 
+
+
+```{r tidy = TRUE}
+# ggplot(data = DatasetOne, aes(x = "", y = Percentage, fill = Sex)) + _____(stat = "identity") +
+# ______ (_____, start=____)
+```
+
+### Question Two
+
+**Dataset Two**, stored in `DatasetTwo`, contains the proportion of the population of Australia in each 5 year age group. The data was taken from Australian Bureau of Statistics, Census of Population and Housing  2011 and 2016. Compiled and presented by .id , the population experts (https://profile.id.com.au/australia/five-year-age-groups). 
+
+```{r echo = FALSE}
+DatasetTwo <- read_excel("AgeFiveYear.xls")
+
+datatable(DatasetTwo)
+```
+
+Taking a look at the data table above, what visualisation do you think is the most approprate. 
+I've set up the barebones of the R code below. 
+\linebreak
+Fill in the blanks below or create your own visualisation from scratch. 
+\linebreak
+
+```{r tidy = TRUE}
+#ggplot(data = DatasetTwo, aes(x = _______ , y = percentage, fill = age_groups)) + 
+#_____(position ="_____", stat = "identity") + theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+```
+
+### Question Three
+
+**Dataset Three** stored as `DatasetThree`, is the percentage of Australians that list each country as their country of birth in 2011. The data was taken from http://quickstats.censusdata.abs.gov.au/census_services/getproduct/census/2011/quickstat/0. 
+
+```{r, echo = FALSE, tidy = TRUE }  
+DatasetThree <-
+  data.frame(
+    birthCountrie = c("Australia", "United Kingdom", "New Zealand", "China", "India", "Phillippines", "Vietnam", "Italy", "South Africa", "Malaysia", "Sri Lanka", "Germany", "Other"),
+    Percentage = c(66.7, 4.64, 2.21, 3.09, 2.66, 1.19, 1.36, 0.96, 0.82, 0.82, 0.65, 0.4, 15 )
+  )
+
+datatable(DatasetThree)
+
+```
+
+Taking a look at the data, we can notice three points that can help you to determine what is the appropriate visualisation. 
+
+1. See that a large proportion, **66.7%** of Australians were in fact born in Australia. 
+2. None of the other countries percentages come anywhere close to this percentage. 
+3. There are 13 wedges. 
+
+These three conditions provide us with a perfect example to use the `pieBar` function. Use the `pieBar` function below to create this new visualisation with the data. 
+```{r fig.height= 6, fig.width=5}
+
+#pieBar(Dataset = '____' , Stacked = '____')
+
+```

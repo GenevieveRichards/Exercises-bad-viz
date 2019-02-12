@@ -1,0 +1,80 @@
+---
+title: "Exercise Three - Clutter"
+author: "Sometimes you just have to filter"
+---
+
+```{r include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, fig.align='center', out.width = "75%", out.height = "75%", fig.width = 5, fig.height = 4)
+library(ggplot2)
+library(binr)
+library(dplyr)
+library(DT)
+library(tools)
+library(RColorBrewer)
+library(readxl)
+library(reshape2)
+library(tidyr)
+library (scales)
+library(latticeExtra)
+library(cowplot)
+source("3D_helper.R")
+source("piebarHelper.R")
+library(knitr)
+library(kableExtra)
+library(DT)
+library(GGally)
+
+theme_set(theme_minimal())
+
+```
+
+When you are preparing a visualisation for other readers to ascertain information, clutter is a common mistake that people will make. Instead of filtering out the unimportant or insignificant details, the writer will visualise all the data they have. However, if you have a large amount of data that is multi variable and each variable contains alot of factors, you need to look at filtering out some of the unimportant details. In the case of the **Clutter Widget** in the Shiny App, all 16 airlines as well as all the causes of delays created a cluttered visualisation. The point of the visualisation was so show that **Southwest airlines co** had the most airline cause delays of all the airlines. 
+
+In order to show this finding better, we needed to filter out all but the top 7 or 8 airlines and not show the delays that were not caused by the airline. Have a play with the Shiny App to see the differences. 
+
+### Explanation of How to Filter and Remove Clutter
+
+Today we will be exploring Absenteeism statistics from a ____ workplace. This dataset was taken from UCL Machine Learning Datasets site. We will try to visualise successfully the relationships between age, the reason for being absent and the total number of hours absent from work. First of all lets take a look at the dataset stored at `Absenteeism_at_work` and the initially cluttered Box and Whiskers Chart. 
+
+```{r}
+Absenteeism_at_work <- read_excel("Absenteeism_at_work.xls")
+names(Absenteeism_at_work) <-gsub("\\s","_",names(Absenteeism_at_work))
+as.factor(Absenteeism_at_work$Reason_for_absence)
+head(Absenteeism_at_work)
+```
+
+```{r out.width="100%", fig.width=7}
+ggplot(Absenteeism_at_work, aes(x = as.factor(Reason_for_absence), y = Absenteeism_time_in_hours, fill= as.factor(Age))) + geom_boxplot() 
+```
+As you can notict this chart is very cluttered and hard to read. There is way to much data being shown here to the extent that is unreadable. So how can we reduce this clutter? 
+
+First of all, it isn't really necessary to encode each age year a different color. In fact we could determine just as much meaning by assigning the each age a bin. If we take a look at the distribution of age in the histogram below can see that youngest person is 25 and the older person is 60, therefore we should bin the age data to 5 year intervals.  
+
+```{r fig.width = 7}
+to_remove <- c("0")
+hist(Absenteeism_at_work$Age)
+```
+To bin a column of a dataset we can use the `cut()` function like below. To use the `cut()` function you need to specify the column you want to bin and the starting value for each interval. For this visualisation, I have broken the age dataset into 10 year intervals. So lets take a look at the updated Box and whiskers chart. 
+
+```{r fig.width=6}
+Absenteeism_at_work$Age <-  cut(Absenteeism_at_work$Age,c(25, 35, 45, 60))
+ggplot(Absenteeism_at_work, aes(x = as.factor(Reason_for_absence), y = Absenteeism_time_in_hours, fill= as.factor(Age))) + geom_boxplot(outlier.shape = NA) 
+```
+Already we can see a noticable decrease in the amount of clutter in this visualisation. From here lets filter out the smallest *Reasons for Absence* in the dataset. In order to explore this easier, lets generate a bar chart for the number of hours absent so that we can easily remove the smallest amount of hours. 
+```{r}
+ggplot(Absenteeism_at_work, aes(x = Reason_for_absence, y = Absenteeism_time_in_hours)) + geom_bar(stat = "identity") + scale_x_continuous(breaks = seq(0,28, 1 )) + theme(axis.text.x = element_text(angle = 90))
+```
+Looking at this dataset we can see that reasons 1, 2, 3, 4, 5, 8, 15, 16, 17, 20, 21, 24 all have a small amount of absentee hours. So we need to filter them out using dplyrs `filter()` function. 
+
+```{r} 
+to_filter <- c("0","1", '2', '3', '4', '5', '8', '15', '16', '17', '20', '21', '24')
+filtered <- filter(Absenteeism_at_work, !(Reason_for_absence %in% to_filter))
+
+filtered
+```
+
+
+```{r out.width="100%", fig.width=7}
+ggplot(filtered, aes(x = as.factor(Reason_for_absence), y = Absenteeism_time_in_hours, fill= as.factor(Age))) + geom_boxplot(outlier.shape = NA) + coord_cartesian(ylim = c(0, 100))  
+```
+

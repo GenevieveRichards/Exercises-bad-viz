@@ -1,0 +1,213 @@
+---
+title: 'Exercise Five - 3D Visualisations'
+author: 'What are the alternatives?'
+---
+```{r echo=FALSE, message = FALSE}
+library(ggplot2)
+library(binr)
+library(dplyr)
+library(DT)
+library(tools)
+library(RColorBrewer)
+library(readxl)
+library(reshape2)
+library(tidyr)
+library (scales)
+library(latticeExtra)
+library(cowplot)
+source("3D_helper.R")
+source("piebarHelper.R")
+library(knitr)
+library(kableExtra)
+library(DT)
+library(GGally)
+library(readxl)
+```
+<style>
+.main-container {
+  max-width: 1800px !important;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
+
+The shiny app highlights one of the main issues faced when using 3D column charts to visualisation multi-dimensional data. It demonstrated that as the data becomes more dense it becomes almost impossible to read the data accurately and determine patterns within said data. As you might have notices, this is due to the columns in the front blocking those in the back completely. Also, it is very hard for the reader to judge the values of those bars that are not hidden. For instance, if you take a look at the 3D visualisation below, taken from the shiny app, can you tell me the value of the front blue bar? Did you determine the value to be 40? 
+
+Based on this, this activity is not going to concentrate on how to make 3D visualisation in R but on the alternative available to display this information. However, the code for the 3D visualisations will be made visible in the worksheet for your perusal. 
+
+```{r echo = FALSE, out.width = "70%", out.width = "70%"}
+dataset <- returned_Matrix(8)
+cloud(as.numeric(as.character(Observation))~as.factor(Type_1)+as.factor(Type_2), dataset, panel.3d.cloud=panel.3dbars,
+          xbase=0.3,  
+          ybase=0.3, 
+          zlab = NULL, 
+          col.facet=c("blue", "yellow", "purple", "orange", "green"),
+          group = Type_1, 
+          scales=list(arrows=FALSE, col=1), xlab = NULL, ylab = NULL, main = NULL,
+          par.settings = list(axis.line = list(col = 0), clip =list(panel="off"),                           layout.heights =
+                                                list(top.padding = 10,
+                                                     main.key.padding = -30,
+                                                     key.axis.padding = 0,
+                                                     axis.xlab.padding = -15,
+                                                     xlab.key.padding = -15,
+                                                     key.sub.padding = -15,
+                                                     bottom.padding = 35)
+          ),
+          par.box = list(col = NA), lcol=NULL
+          )
+
+```
+Lets take a look at a 3D visualisation replicated from a scientific publication online. The data is the gene **Hypermethylation** profile for Human Cancer taken from http://cancerres.aacrjournals.org/content/61/8/3225.figures-only. The data used for this visualisation is stored in a dataframe at `hypermthylation` and the dataframe is printed below. 
+
+```{r echo = FALSE}
+hypermthylation1 <- read_excel("hypermthylation.xlsx")
+hypermthylation <- gather(hypermthylation1, genes, value, 2:ncol(hypermthylation1))
+datatable((hypermthylation))
+```
+The 3D column chart for this data is shown below. There is only one R library that could be found to create 3D column charts, `latticeExtra` and the documentation for the library can be found at https://cran.r-project.org/web/packages/latticeExtra/latticeExtra.pdf and the quality and manipulation of these visualisations is limited compared on `ggplot2`. 
+
+```{r out.width = "70%", out.width = "70%"}
+cloud(value ~ as.factor(TumorTypes) + as.factor(genes), 
+      hypermthylation, panel.3d.cloud=panel.3dbars,
+      xbase=0.3,  
+      ybase=0.3, 
+      zlab = NULL,
+      groups = genes,
+      col.facet = c("blue", "yellow", "purple", "orange", "green", "purple", "pink"),
+                par.settings = list(axis.line = list(col = 0),
+                                               clip =list(panel="off"), 
+                                    axis.text = list(cex = 0.4),
+                                                              layout.heights =
+                                                list(top.padding = 10,
+                                                     main.key.padding = -30,
+                                                     key.axis.padding = 0,
+                                                     axis.xlab.padding = -15,
+                                                     xlab.key.padding = -15,
+                                                     key.sub.padding = -15,
+                                                     bottom.padding = 30)
+          ),
+      scales=list(arrows=FALSE, col=1), xlab = NULL, ylab = NULL, main = NULL,
+      par.box = list(col = NA), lcol=NULL
+)
+```
+The 3D column chart above is very cluttered and the columns towards the back are occluded by the front columns. So, lets explore the alternatives to a 3D column chart to display multi dimensional data. 
+
+### So what are the different alternatives to a 3D column chart? 
+
+**1. Clustered Bar Chart ** 
+
+A clustered/dodge bar chart takes a 3D bar chart spreads the information out across the X-axis, **portraying** the third variable using color. The **Clustered Bar Chart** is one of the simplest ways to encode three variables clearly if there isn't too factors. However, if there are lots of factors in the third variable, as is the case here with the variable `TumorTypes` it becomes difficult to interpret individual factors. 
+
+Note: There is missing data in this dataset, the **Clustered Bar Chart** does not allow you to easily identify that this is the case. 
+
+```{r warning = FALSE}
+ggplot(hypermthylation, aes(x = genes, y = value, fill = TumorTypes)) + 
+  geom_bar(position = "dodge", stat = "identity") + 
+    theme(
+    legend.title = element_blank(),
+    axis.text.x = element_text(angle = 90, hjust = 1)
+  ) + guides(color = guide_legend(nrow = 5))
+
+```
+
+**2. Faceted bar charts** 
+
+A better option is to use a facetted bar charts which separates each factor in the third variable, `Tumor Types`, into its own plot area of the chart. In this chart type, there is no concern about the number of factors in the third variable as there was in the **Clustered Bar Chart**. It is also easier to determine the values of the bar chart. Although, it is hard to compare values across factors with **Faceted Bar Charts** as they are no longer next to each other. 
+
+Also, unlike the **Clustered Bar Chart** the **Faceted Bar Chart** makes it easier to identify missing data. 
+
+```{r warning = FALSE}
+ggplot(hypermthylation, aes(x = genes, y = value, fill = TumorTypes)) + 
+  geom_bar(position = "dodge", stat = "identity") + facet_grid(rows = vars(TumorTypes))  + 
+    theme(
+    legend.title = element_blank(),
+    axis.text.x = element_text(angle = 90, hjust = 1),
+    axis.text.y = element_text(size = 3), 
+    strip.text.y = element_text(size = 3)
+  ) + guides(color = guide_legend(nrow = 8))
+```
+
+**3. Parallel Coordinates**
+
+**Parallel Coordinates** charts are ideal for comparing multiple variables in multidimensional datasets and allows the reader to easily see the relationships between them. The axes represent different variables in the dataset and the values are plotted as a series of lines that connected across all the axes. This visualization is closely related to time series visualization, however the variables do not have a natural order like time series variables. Therefore, different axis arrangements may be of interest. 
+
+Note: The `ggparcoord` function will not visualise any factors of a variable that contain missing data. In order to visualise all the factors all missing data was replaced with -0.05. This means that missing data is not identifiable, however if your dataset no missing information this chart makes it very easy to identify patterns in the data. 
+
+```{r warning = FALSE}
+hypermthylation1[is.na(hypermthylation1)] <- -0.05
+ggparcoord(hypermthylation1,  columns = 2:ncol(hypermthylation1), groupColumn = 'TumorTypes', scale = 'globalminmax') +   theme(
+    legend.title = element_blank(),
+    axis.text.x = element_text(angle = 90, hjust = 1)
+  ) + ylim(c(-0.05, 1)) + geom_point() + guides(color = guide_legend(nrow = 8))
+```
+
+**Parallel Coordinates** can also be useful in identifying patterns easily for a large amount of data. Lets take a look at following **Parallel Coordinates** chart comparing Red and White wine data. From this chart, we can identify that *white wine*  typically has higher sulphar dioxide levels and *red wine* has high levels of fixed acidity, volatile acidity and chlorides. 
+
+```{r echo=FALSE}
+red <- read.csv("winequality-red.csv", sep = ";")
+white <- read.csv("winequality-white.csv", sep = ";")
+
+
+red['color'] <- "red"
+white['color'] <- "white"
+
+wineDataSet <- rbind(white, red)
+wineDataSet <- wineDataSet[sample(nrow(wineDataSet)),]
+
+ggparcoord(wineDataSet, columns = c(1:7, 10:12), groupColumn = 'color', scale = 'uniminmax', alphaLines = 0.2) +   theme(
+    legend.title = element_blank(),
+    axis.text.x = element_text(angle = 90, hjust = 1)
+  )
+
+```
+**4. Scatter Dot Plots ** 
+
+**Scatter Dot Plots** are useful to visualise for multi-dimensional datasets, as like **Clustered Bar Charts**, the third variable is encoded using color. They also have the added benefit to encode a fourth variable using **size** to embed a second continuous variable. 
+
+
+```{r warning = FALSE}
+ggplot(hypermthylation, aes(y = value, x = genes, col = TumorTypes)) + 
+   geom_point(alpha = 0.4, size = 3) +
+    theme(
+    legend.title = element_blank(),
+    axis.text.x = element_text(angle = 90, hjust = 1)
+  ) + guides(size=guide_legend(nrow=1), color = guide_legend(nrow = 8))
+
+```
+
+<h4> **Question** </h4> 
+
+Now it's your turn to have a go at creating alterntive charts for the following Dataset that contains air quality data. The dataset is stored at `air_quality` and shown below. We are interested in exploring the relationship between`geo_type_name` vs `geo_entity_id`/`geo_entity_name` vs the measures at `data_valuemessage`. 
+
+```{r}
+air_quality <- read.csv("Air_Quality.csv")
+air_quality <-dplyr:: filter(air_quality, year_description == 'Annual    2009-2010')
+datatable(air_quality, options = list(scrollX = TRUE))
+```
+If we take a look at this 3D visualisation we can quickly determine that this is not an appropriate chart for this data. More than 50% of the data in this chart is ocluded by the front columns and the mass amount of data shown makes it very difficult to identify any insights.  
+```{r out.width = "70%", out.width = "70%"}
+cloud(data_valuemessage ~ as.factor(geo_entity_id) + as.factor(name), 
+      air_quality, panel.3d.cloud=panel.3dbars,
+      xbase=0.3,  
+      ybase=0.3, 
+      zlab = NULL,
+      groups = name,
+      col.facet =as.factor(air_quality$name),
+      scales=list(arrows=FALSE, col=1, x=list(rot=90)), xlab = NULL, ylab = NULL, main = NULL,
+      par.box = list(col = NA), lcol=NULL, 
+      par.settings = list(axis.line = list(col = 0),
+                                               clip =list(panel="off"), 
+                                    axis.text = list(cex = 0.4),
+                          layout.heights =
+                                                list(top.padding = 10,
+                                                     main.key.padding = -30,
+                                                     key.axis.padding = 0,
+                                                     axis.xlab.padding = -15,
+                                                     xlab.key.padding = -15,
+                                                     key.sub.padding = -15,
+                                                     bottom.padding = 30)
+          )
+)
+```
+
+Download the **Working Notebook** and complete exercise under **Exercise Four: 3D Visualisations**. Create as 3 different charts using this data, you can include the charts you see here or come up with some alternatives. Finish the question by determining what chart you think is most appropriate.  Our proposed answers are included in the `Answers Tab`. 

@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Pie Charts Answers</title>
+
+<script src="site_libs/jquery-1.12.4/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<script src="site_libs/htmlwidgets-1.3/htmlwidgets.js"></script>
+<link href="site_libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="site_libs/datatables-binding-0.5/datatables.js"></script>
+<link href="site_libs/dt-core-1.10.16/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="site_libs/dt-core-1.10.16/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="site_libs/dt-core-1.10.16/js/jquery.dataTables.min.js"></script>
+<link href="site_libs/crosstalk-1.0.0/css/crosstalk.css" rel="stylesheet" />
+<script src="site_libs/crosstalk-1.0.0/js/crosstalk.min.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html"></a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">
+    <span class="fa fa-home"></span>
+     
+    Home
+  </a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Exercise One
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Untitled.html">Questions</a>
+    </li>
+    <li>
+      <a href="answer_untitles.html">Answers</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Exercise Two
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Exercise_2_Pie_Chards.html">Questions</a>
+    </li>
+    <li>
+      <a href="Pie_Charts_Answers.html">Answers</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Exercise Three
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="exercise_three_clutter.html">Questions</a>
+    </li>
+    <li>
+      <a href="exer_three_ans.html">Answers</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Exercise Four
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="exercise_three_clutter.html">Questions</a>
+    </li>
+    <li>
+      <a href="heatmap_answers.html">Answers</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Exercise Five
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="3DVIZ.html">Questions</a>
+    </li>
+    <li>
+      <a href="3DVIZ_ANS.html">Answers</a>
+    </li>
+  </ul>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Pie Charts Answers</h1>
+
+</div>
+
+
+<hr />
+<style>
+.main-container {
+  max-width: 1800px !important;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
+<h5>
+Question One
+</h5>
+<p><strong>Dataset One</strong></p>
+<pre><code>##      Sex Percentage
+## 1 Female      0.498
+## 2   Male      0.502</code></pre>
+<p><strong>Visualisation One</strong> If you take a look at the dataset, you can note that if we used a Pie Chart there would only be two wedges. Therefore, if you plotted a pie chart you would have been correct. Note, if you plotted a bar chart that would also have been correct</p>
+<p>To explore, lets take a look at how easy it is to compare two countries population distributions using pie charts. The Pie Charts below compare Australia to Saudi Arabia.</p>
+<pre class="r"><code>Saudi_Arabia &lt;-
+  data.frame(
+    Sex = c(&quot;Female&quot;, &quot;Male&quot;),
+    Percentage = c(0.448, 0.552)
+  )
+
+g1 &lt;- ggplot(data = DatasetOne, aes(x = &quot;&quot;, y = Percentage, fill = Sex)) + 
+  geom_bar(stat = &quot;identity&quot;) + coord_polar(&quot;y&quot;, start=0)  + 
+  ggtitle(&quot;Australia&quot;) + 
+  theme(
+    plot.title = element_text(hjust = 0.5),
+    axis.title.y = element_blank(),
+    axis.title.x = element_blank(),
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.background = element_blank(),
+    axis.line = element_blank()
+  )
+
+g2 &lt;- ggplot(data = Saudi_Arabia, aes(x = &quot;&quot;, y = Percentage, fill = Sex)) + 
+  geom_bar(stat = &quot;identity&quot;) + coord_polar(&quot;y&quot;, start=0) +
+  ggtitle(&quot;Saudi Arabia&quot;) + 
+  theme(
+    plot.title = element_text(hjust = 0.5),
+    axis.title.y = element_blank(),
+    axis.title.x = element_blank(),
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.background = element_blank(),
+    axis.line = element_blank()
+  )
+
+legend &lt;- get_legend(g2)
+plot_grid(
+  plot_grid(g1 + coord_polar(&quot;y&quot;, start = 0) + theme(legend.position = &quot;none&quot;), 
+            g2 + coord_polar(&quot;y&quot;, start = 0) + theme(legend.position = &quot;none&quot;),
+            ncol =2), 
+  
+  legend, ncol = 2, rel_widths = c(0.9, 0.1))</code></pre>
+<p><img src="Pie_Charts_Answers_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p><strong>Question Two</strong></p>
+<pre><code>## # A tibble: 18 x 4
+##    age_groups   Number percentage Capital_Cities
+##    &lt;chr&gt;         &lt;dbl&gt;      &lt;dbl&gt;          &lt;dbl&gt;
+##  1 0 to 4      1464776       6.26           6.40
+##  2 5 to 9      1502644       6.42           6.38
+##  3 10 to 14    1397182       5.97           5.85
+##  4 15 to 19    1421612       6.07           6.09
+##  5 20 to 24    1566792       6.70           7.19
+##  6 25 to 29    1664609       7.11           7.78
+##  7 30 to 34    1703852       7.28           7.96
+##  8 35 to 39    1561686       6.67           7.14
+##  9 40 to 44    1583254       6.77           6.98
+## 10 45 to 49    1581460       6.76           6.80
+## 11 50 to 54    1523557       6.51           6.34
+## 12 55 to 59    1454332       6.21           5.85
+## 13 60 to 64    1299406       5.55           5.09
+## 14 65 to 69    1188989       5.08           4.54
+## 15 70 to 74     887721       3.79           3.35
+## 16 75 to 79     652671       2.79           2.50
+## 17 80 to 84     460555       1.97           1.80
+## 18 85 and over  486847       2.08           1.96</code></pre>
+<p><strong>ANSWER: Taking a look at the data, we can see that if we were to plot the data using a pie chart we would have 18 wedges, which is more than the prescribed three wedges. Therefore, we should plot the data as a bar chart. The question is, What type of bar chart would be best? Stacked or Dodge. Which did you choose?</strong></p>
+<p>Lets take a look at both of these to determine which one displays the data the best.</p>
+<div id="dodge-bar-chart-vs-stacked-bar-chart" class="section level4">
+<h4>Dodge Bar Chart vs Stacked Bar Chart</h4>
+<p><img src="Pie_Charts_Answers_files/figure-html/unnamed-chunk-5-1.png" width="768" /></p>
+<p>Taking a look at these two visualisations, it appears easier to determine inidiviual values using the ‘Dodge’ bar chart instead of the stacked.</p>
+<p><strong>Question Three</strong> <div id="htmlwidget-fa1892c659ea4cc1baf8" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-fa1892c659ea4cc1baf8">{"x":{"filter":"none","data":[["1","2","3","4","5","6","7","8","9","10","11","12","13"],["Australia","United Kingdom","New Zealand","China","India","Phillippines","Vietnam","Italy","South Africa","Malaysia","Sri Lanka","Germany","Other"],[66.7,4.64,2.21,3.09,2.66,1.19,1.36,0.96,0.82,0.82,0.65,0.4,15]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> <\/th>\n      <th>birthCountrie<\/th>\n      <th>Percentage<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"columnDefs":[{"className":"dt-right","targets":2},{"orderable":false,"targets":0}],"order":[],"autoWidth":false,"orderClasses":false}},"evals":[],"jsHooks":[]}</script> Taking a look at the data, we can notice three points that can help you to determine what is the appropriate visualisation.</p>
+<ol style="list-style-type: decimal">
+<li>See that a large proportion, <strong>66.7%</strong> of Australians were in fact born in Australia.</li>
+<li>None of the other countries percentages come anywhere close to this percentage.</li>
+<li>There are 13 wedges.</li>
+</ol>
+<p>These three conditions provide us with a perfect example to use the <code>pieBar</code> function. Use the <code>pieBar</code> function below to create this new visualisation with the data.</p>
+<pre class="r"><code>#pieBar(Dataset = &#39;____&#39; , Stacked = &#39;____&#39;)</code></pre>
+<p>Does your function look the same as below?</p>
+<p>Did you use a stacked or dodge bar chart?</p>
+<pre class="r"><code>pieBar(Dataset = DatasetThree, Stacked = TRUE)</code></pre>
+<p><img src="Pie_Charts_Answers_files/figure-html/unnamed-chunk-8-1.png" width="768" /></p>
+<pre class="r"><code>pieBar(Dataset = DatasetThree, Stacked = FALSE)</code></pre>
+<p><img src="Pie_Charts_Answers_files/figure-html/unnamed-chunk-9-1.png" width="768" /></p>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

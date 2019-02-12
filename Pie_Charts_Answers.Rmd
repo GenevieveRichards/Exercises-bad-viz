@@ -1,0 +1,156 @@
+---
+title: "Pie Charts Answers"
+---
+---
+```{r echo=FALSE, message = FALSE}
+library(ggplot2)
+library(binr)
+library(dplyr)
+library(DT)
+library(tools)
+library(RColorBrewer)
+library(readxl)
+library(reshape2)
+library(tidyr)
+library (scales)
+library(latticeExtra)
+library(cowplot)
+source("3D_helper.R")
+source("piebarHelper.R")
+library(knitr)
+library(kableExtra)
+library(DT)
+library(GGally)
+library(readxl)
+```
+<style>
+.main-container {
+  max-width: 1800px !important;
+  margin-left: auto;
+  margin-right: auto;
+}
+</style>
+<h5> Question One </h5>
+
+**Dataset One** 
+```{r, echo = FALSE }  
+DatasetOne <-
+  data.frame(
+    Sex = c("Female", "Male"),
+    Percentage = c(0.498, 0.502)
+  )
+
+print(DatasetOne)
+
+```
+
+**Visualisation One** 
+If you take a look at the dataset, you can note that if we used a Pie Chart there would only be two wedges. Therefore, if you plotted a pie chart you would have been correct. Note, if you plotted a bar chart that would also have been correct
+
+To explore, lets take a look at how easy it is to compare two countries population distributions using pie charts. The Pie Charts below compare Australia to Saudi Arabia. 
+
+
+``` {r message = FALSE}
+Saudi_Arabia <-
+  data.frame(
+    Sex = c("Female", "Male"),
+    Percentage = c(0.448, 0.552)
+  )
+
+g1 <- ggplot(data = DatasetOne, aes(x = "", y = Percentage, fill = Sex)) + 
+  geom_bar(stat = "identity") + coord_polar("y", start=0)  + 
+  ggtitle("Australia") + 
+  theme(
+    plot.title = element_text(hjust = 0.5),
+    axis.title.y = element_blank(),
+    axis.title.x = element_blank(),
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.background = element_blank(),
+    axis.line = element_blank()
+  )
+
+g2 <- ggplot(data = Saudi_Arabia, aes(x = "", y = Percentage, fill = Sex)) + 
+  geom_bar(stat = "identity") + coord_polar("y", start=0) +
+  ggtitle("Saudi Arabia") + 
+  theme(
+    plot.title = element_text(hjust = 0.5),
+    axis.title.y = element_blank(),
+    axis.title.x = element_blank(),
+    panel.grid.major = element_blank(),
+    panel.grid.minor = element_blank(),
+    panel.background = element_blank(),
+    axis.line = element_blank()
+  )
+
+legend <- get_legend(g2)
+plot_grid(
+  plot_grid(g1 + coord_polar("y", start = 0) + theme(legend.position = "none"), 
+            g2 + coord_polar("y", start = 0) + theme(legend.position = "none"),
+            ncol =2), 
+  
+  legend, ncol = 2, rel_widths = c(0.9, 0.1))
+
+```
+
+**Question Two** 
+
+```{r echo = FALSE}
+DatasetTwo <- read_excel("AgeFiveYear.xls")
+
+head(DatasetTwo, 18L)
+```
+
+**ANSWER: Taking a look at the data, we can see that if we were to plot the data using a pie chart we would have 18 wedges, which is more than the prescribed three wedges. Therefore, we should plot the data as a bar chart. The question is, What type of bar chart would be best? Stacked or Dodge. Which did you choose?**
+
+Lets take a look at both of these to determine which one displays the data the best. 
+
+#### Dodge Bar Chart vs Stacked Bar Chart
+
+
+```{r, echo = FALSE, fig.width= 8, tidy = TRUE }
+g1 <- ggplot(data = DatasetTwo, aes(x = age_groups , y = percentage, fill = age_groups)) + 
+  geom_bar(position = "dodge", stat = "identity") + theme(axis.text.x = element_text(angle = 90, hjust = 1), legend.position = "none") 
+
+g2 <- ggplot(data = DatasetTwo, aes(x = "" , y = percentage, fill = age_groups)) + 
+  geom_bar(stat = "identity", colour = "black") + theme(axis.text.x = element_text(angle = 90, hjust = 1), legend.key.size = unit(3, "mm"), legend.title = element_blank()) 
+
+plot_grid(g1, g2)
+```
+
+Taking a look at these two visualisations, it appears easier to determine inidiviual values using the 'Dodge' bar chart instead of the stacked.
+
+**Question Three** 
+```{r, echo = FALSE, tidy = TRUE }  
+DatasetThree <-
+  data.frame(
+    birthCountrie = c("Australia", "United Kingdom", "New Zealand", "China", "India", "Phillippines", "Vietnam", "Italy", "South Africa", "Malaysia", "Sri Lanka", "Germany", "Other"),
+    Percentage = c(66.7, 4.64, 2.21, 3.09, 2.66, 1.19, 1.36, 0.96, 0.82, 0.82, 0.65, 0.4, 15 )
+  )
+
+datatable(DatasetThree)
+
+```
+Taking a look at the data, we can notice three points that can help you to determine what is the appropriate visualisation. 
+
+1. See that a large proportion, **66.7%** of Australians were in fact born in Australia. 
+2. None of the other countries percentages come anywhere close to this percentage. 
+3. There are 13 wedges. 
+
+These three conditions provide us with a perfect example to use the `pieBar` function. Use the `pieBar` function below to create this new visualisation with the data. 
+```{r fig.height= 6, fig.width=5}
+#pieBar(Dataset = '____' , Stacked = '____')
+```
+
+
+Does your function look the same as below? 
+
+Did you use a stacked or dodge bar chart?
+```{r fig.height= 6, fig.width=8}
+pieBar(Dataset = DatasetThree, Stacked = TRUE)
+```
+
+
+```{r fig.height= 6, fig.width=8}
+pieBar(Dataset = DatasetThree, Stacked = FALSE)
+```
